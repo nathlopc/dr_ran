@@ -64,10 +64,12 @@ class Login extends StatelessWidget {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    if (email.text != _email || password.text != _password)
+                    return Home("Nathália Lopes", "nathalialcoimbra@gmail.com");
+
+                    /*if (email.text != _email || password.text != _password)
                       return Alerta("Erro", "Login e/ou senha incorretos!");
 
-                    return Home(_nome);
+                    return Home(_nome, _email);*/
                   }
                 );
               },

@@ -1,11 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'main.dart';
+import 'news.dart';
+import 'consulta.dart';
+import 'historico.dart';
+import 'hospitais.dart';
 
 class Home extends StatelessWidget {
 
   final String _nome;
+  final String _email;
 
-  Home(this._nome);
+  Home(this._nome, this._email);
 
   @override
   Widget build(BuildContext context) {
@@ -16,10 +22,58 @@ class Home extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column (
           children: <Widget>[
-            Text("Olá, " + _nome)
+            
           ]
         )
       ),
+      drawer: new Drawer(
+        child: ListView(
+          children: <Widget>[
+            new UserAccountsDrawerHeader(
+              accountName: Text(_nome), 
+              accountEmail: Text(_email),
+              currentAccountPicture: new CircleAvatar(
+                backgroundImage: new NetworkImage('https://img.freepik.com/free-vector/businessman-profile-cartoon_18591-58479.jpg?size=338&ext=jpg'),
+              ),
+            ),
+            new ListTile(
+              title: Text("Notícias Covid-19"),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.push(
+                  context, 
+                  MaterialPageRoute(builder: (BuildContext context) => News()));
+              },
+            ),
+            new ListTile(
+              title: Text("Consulta"),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) => Consulta()));
+              },
+            ),
+            new ListTile(
+              title: Text("Histórico"),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) => Historico()));
+              }
+            ),
+            new ListTile(
+              title: Text("Hospitais"),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) => Hospitais()));
+              },
+            ),
+            new Divider(),
+            new ListTile(
+              title: Text("Sair"),
+              onTap: () => Navigator.push(context, new MaterialPageRoute(builder: (context) => Main()))
+            )
+          ]
+        )
+      )
     );
   }
 }
