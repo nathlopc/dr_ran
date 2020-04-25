@@ -1,16 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'cadastro.dart';
-import 'alerta.dart';
+import 'util/alerta.dart';
+import 'models/userModel.dart';
 import 'home.dart';
 
 class Login extends StatelessWidget {
 
-  final String _nome;
-  final String _email;
-  final String _password;
-
-  Login(this._nome, this._email, this._password);
+  final User _user;
+  Login(this._user);
 
   final nome = TextEditingController();
   final email = TextEditingController();
@@ -64,12 +62,12 @@ class Login extends StatelessWidget {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return Home("Nathália Lopes", "nathalialcoimbra@gmail.com");
+                    return Home(new User("Nathália Lopes", "nathalialcoimbra@gmail.com", "18/04/1992", "SP", "São Paulo", "12345"));
 
-                    /*if (email.text != _email || password.text != _password)
+                    /*if (email.text != _user.email || password.text != _user.senha)
                       return Alerta("Erro", "Login e/ou senha incorretos!");
 
-                    return Home(_nome, _email);*/
+                    return Home(_user);*/
                   }
                 );
               },

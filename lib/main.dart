@@ -9,7 +9,7 @@ class Main extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Dr. RAN',
-      home: Login(null, null, null),
+      home: Login(null),
     );
   }
 }

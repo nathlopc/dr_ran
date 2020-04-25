@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'login.dart';
-import 'alerta.dart';
+import 'util/alerta.dart';
+import 'models/userModel.dart';
 
 class Cadastro extends StatelessWidget {
 
@@ -10,6 +11,8 @@ class Cadastro extends StatelessWidget {
   final email = TextEditingController();
   final password = TextEditingController();
   final password2 = TextEditingController();
+  final estado = TextEditingController();
+  final cidade = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +68,34 @@ class Cadastro extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(24.0),
               child: TextField(
+                controller: estado,
+                style: TextStyle(
+                  fontSize: 24.0 
+                ),
+                decoration: InputDecoration(
+                  labelText: "Estado:",
+                  icon: Icon(Icons.location_on)
+                ),
+                keyboardType: TextInputType.text,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: TextField(
+                controller: cidade,
+                style: TextStyle(
+                  fontSize: 24.0 
+                ),
+                decoration: InputDecoration(
+                  labelText: "Cidade:",
+                  icon: Icon(Icons.location_city)
+                ),
+                keyboardType: TextInputType.text,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: TextField(
                 controller: password,
                 obscureText: true,
                 style: TextStyle(
@@ -111,13 +142,21 @@ class Cadastro extends StatelessWidget {
                     if (email.text == null || email.text.trim() == "")
                       return Alerta("Erro", "Preencha o e-mail.");
 
+                    if (estado.text == null || estado.text.trim() == "")
+                      return Alerta("Erro", "Preencha o estado.");
+
+                    if (cidade.text == null || cidade.text.trim() == "")
+                      return Alerta("Erro", "Preencha a cidade.");
+
                     if (password.text == null || password.text.trim() == "")
                       return Alerta("Erro", "Preencha a senha.");
 
                     if (password2.text != password.text)
                       return Alerta("Erro", "Confirmação de senha incorreta!");
 
-                    return Login(nome.text, email.text, password.text);
+                    final user = new User(nome.text, email.text, data.text, estado.text, cidade.text, password.text);
+
+                    return Login(user);
                   }
                 );
               },

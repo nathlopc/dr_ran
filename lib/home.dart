@@ -3,15 +3,13 @@ import 'package:flutter/material.dart';
 import 'main.dart';
 import 'news.dart';
 import 'consulta.dart';
-import 'historico.dart';
+import 'models/userModel.dart';
 import 'hospitais.dart';
 
 class Home extends StatelessWidget {
 
-  final String _nome;
-  final String _email;
-
-  Home(this._nome, this._email);
+  final User _user;
+  Home(this._user);
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +28,8 @@ class Home extends StatelessWidget {
         child: ListView(
           children: <Widget>[
             new UserAccountsDrawerHeader(
-              accountName: Text(_nome), 
-              accountEmail: Text(_email),
+              accountName: Text(_user.nome), 
+              accountEmail: Text(_user.email),
               currentAccountPicture: new CircleAvatar(
                 backgroundImage: new NetworkImage('https://img.freepik.com/free-vector/businessman-profile-cartoon_18591-58479.jpg?size=338&ext=jpg'),
               ),
@@ -51,13 +49,6 @@ class Home extends StatelessWidget {
                 Navigator.of(context).pop();
                 Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) => Consulta()));
               },
-            ),
-            new ListTile(
-              title: Text("Histórico"),
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) => Historico()));
-              }
             ),
             new ListTile(
               title: Text("Hospitais"),
