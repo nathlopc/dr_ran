@@ -11,11 +11,54 @@ class NewsItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: ListTile(
-        leading: Icon(Icons.local_library),
-        title: Text(_news.title),
-        subtitle: Text(_news.subtitle),
-        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => NewsDetail(_news)))
+      child: new InkWell(
+        onTap: () { 
+          Navigator.push(context, MaterialPageRoute(builder: (context) => NewsDetail(_news)));
+        },
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(top: 20),
+              child: Chip(
+                backgroundColor: Colors.red,
+                padding: const EdgeInsets.all(0),
+                label: Text(
+                  "Últimas notícias",
+                  style: TextStyle(
+                    color: Colors.white,
+                  )
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Text(
+                _news.title,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87
+                ),
+              )
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left:20, right: 20),
+              child: Image(
+                image: NetworkImage(_news.image),
+                fit: BoxFit.contain,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Text(
+                _news.subtitle,
+                style: TextStyle(
+                  color: Colors.black54
+                )
+              )
+            )
+          ],
+        ),
       )
     );
   }

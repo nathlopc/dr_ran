@@ -3,9 +3,6 @@ import 'package:flutter/material.dart';
 
 class Consulta extends StatelessWidget {
 
-  bool febre = false;
-  bool tosse = false;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,23 +18,11 @@ class Consulta extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(24.0),
-              child: CheckboxListTile(
-                value: febre,
-                title: Text("Febre"),
-                onChanged: (bool value) { 
-                  febre = value;
-                },
-              )
+              child: Text("Febre")
             ),
             Padding(
               padding: const EdgeInsets.all(24.0),
-              child: CheckboxListTile(
-                value: tosse,
-                title: Text("Tosse"),
-                onChanged: (bool value) { 
-                  tosse = value;
-                },
-              )
+              child: Text("Tosse")
             ),
           ],
         ),
