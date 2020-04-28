@@ -1,7 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Consulta extends StatelessWidget {
+class Consulta extends StatefulWidget {
+
+   @override
+  State<StatefulWidget> createState() {
+    return NewConsulta();
+  }
+}
+
+class NewConsulta extends State<Consulta> {
+
+  bool _febre = false;
+  bool _tosse = false;
 
   @override
   Widget build(BuildContext context) {
@@ -18,15 +29,32 @@ class Consulta extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(24.0),
-              child: Text("Febre")
+              child: CheckboxListTile(
+                title: Text("Febre"),
+                onChanged: (bool resp) {
+                  setState(() {
+                    _febre = resp;
+                  });
+                },
+                value: _febre,
+              )
             ),
             Padding(
               padding: const EdgeInsets.all(24.0),
-              child: Text("Tosse")
+              child: CheckboxListTile(
+                title: Text("Tosse"),
+                onChanged: (bool resp) {
+                  setState(() {
+                    _tosse = resp;
+                  });
+                },
+                value: _tosse
+              )
             ),
           ],
         ),
       ),
     );
   }
+
 }

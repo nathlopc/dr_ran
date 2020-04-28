@@ -1,12 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:maps_launcher/maps_launcher.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../models/hospitalModel.dart';
 
-class Hospital extends StatelessWidget {
+class Hospital extends StatefulWidget {
 
   final HospitalModel _hospital;
   Hospital(this._hospital);
+
+  @override
+  State<StatefulWidget> createState() {
+    return HospitalItem();
+  }
+}
+
+class HospitalItem extends State<Hospital> {
+  
+  Future<void> _call;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +27,7 @@ class Hospital extends StatelessWidget {
           Padding(
             padding: EdgeInsets.all(20),
             child: Text(
-              _hospital.nome,
+              widget._hospital.nome,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.black87,
@@ -25,15 +36,18 @@ class Hospital extends StatelessWidget {
               ),
             ),
           ),
-          /*Padding(
+          Padding(
             padding: EdgeInsets.only(bottom: 10),
             child: InkWell(
               onTap: () {
-                debugPrint(_hospital.telefone);
+                var telefone = widget._hospital.telefone;
+                setState(() {
+                  _call = phoneCall('tel:' + telefone);
+                });
               },
               child: ListTile(
                 title: Text(
-                  _hospital.telefone,
+                  widget._hospital.telefone,
                   style: TextStyle(
                     color: Colors.lightBlue
                   ),
@@ -41,23 +55,23 @@ class Hospital extends StatelessWidget {
                 leading: Icon(Icons.phone, size: 25,),
               ),
             ),
-          ),*/
-          Padding(
+          ),
+          /*Padding(
             padding: EdgeInsets.only(bottom: 0),
             child: ListTile(
-              title: Text(_hospital.telefone, style: TextStyle(color: Colors.black54)),
+              title: Text(widget._hospital.telefone, style: TextStyle(color: Colors.black54)),
               leading: Icon(Icons.phone),
             ),
-          ),
+          ),*/
           Padding(
             padding: EdgeInsets.only(bottom: 20),
             child: InkWell(
               onTap: () {
-                MapsLauncher.launchQuery(_hospital.endereco);
+                MapsLauncher.launchQuery(widget._hospital.endereco);
               },
               child: ListTile(
                 title: Text(
-                  _hospital.endereco,
+                  widget._hospital.endereco,
                   style: TextStyle(
                     color: Colors.lightBlue
                   )
@@ -69,5 +83,14 @@ class Hospital extends StatelessWidget {
         ],
       )
     );
+  }
+}
+
+Future<void> phoneCall(String phone) async {
+  if (await canLaunch(phone)) {
+    await launch(phone);
+  }
+  else {
+    debugPrint('Could not make phone call to $phone');
   }
 }
