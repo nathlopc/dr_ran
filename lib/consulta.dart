@@ -228,11 +228,11 @@ class NewConsulta extends State<Consulta> {
                       
                       int percentage = 28;
 
-                      if (_respirar)
+                      if (_respirar == true)
                       {
                         percentage = 54;
                         int idade = getIdade(widget.user.data);
-                        if (!_naopossui || idade > 60)
+                        if (_naopossui == false || idade > 60)
                           percentage = 76;
                       }
 

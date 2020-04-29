@@ -70,12 +70,17 @@ class Login extends StatelessWidget {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return Home(new User("Nathália Lopes", "nathalialcoimbra@gmail.com", "18/04/1992", "SP", "São Paulo", "12345"));
+                      //return Home(new User("Nathália Lopes", "nathalialcoimbra@gmail.com", "18/04/1992", "SP", "São Paulo", "12345"));
+                      if (email.text == null || email.text == '')
+                        return Alerta("Erro", "Preencha o campo e-mail.");
 
-                      /*if (email.text != _user.email || password.text != _user.senha)
+                      if (password.text == null || password.text == '')
+                        return Alerta("Erro", "Preencha o campo senha");
+
+                      if (_user == null || email.text != _user.email || password.text != _user.senha)
                         return Alerta("Erro", "Login e/ou senha incorretos!");
 
-                      return Home(_user);*/
+                      return Home(_user);
                     }
                   );
                 },

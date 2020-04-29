@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'login.dart';
 import 'util/alerta.dart';
 import 'models/userModel.dart';
@@ -13,6 +14,8 @@ class Cadastro extends StatelessWidget {
   final password2 = TextEditingController();
   final estado = TextEditingController();
   final cidade = TextEditingController();
+
+  var maskDate = new MaskTextInputFormatter(mask: '##/##/####', filter: {"#": RegExp(r'[0-9]')});
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +38,7 @@ class Cadastro extends StatelessWidget {
                   icon: Icon(Icons.person)
                 ),
                 keyboardType: TextInputType.text,
+                maxLength: 50,
               ),
             ),
             Padding(
@@ -49,6 +53,7 @@ class Cadastro extends StatelessWidget {
                   icon: Icon(Icons.calendar_today)
                 ),
                 keyboardType: TextInputType.datetime,
+                inputFormatters: [maskDate],
               ),
             ),
             Padding(
@@ -63,6 +68,7 @@ class Cadastro extends StatelessWidget {
                   icon: Icon(Icons.email)
                 ),
                 keyboardType: TextInputType.emailAddress,
+                maxLength: 50,
               ),
             ),
             Padding(
@@ -77,6 +83,7 @@ class Cadastro extends StatelessWidget {
                   icon: Icon(Icons.location_on)
                 ),
                 keyboardType: TextInputType.text,
+                maxLength: 2,
               ),
             ),
             Padding(
@@ -91,6 +98,7 @@ class Cadastro extends StatelessWidget {
                   icon: Icon(Icons.location_city)
                 ),
                 keyboardType: TextInputType.text,
+                maxLength: 30,
               ),
             ),
             Padding(
@@ -106,6 +114,7 @@ class Cadastro extends StatelessWidget {
                   icon: Icon(Icons.vpn_key),
                 ),
                 keyboardType: TextInputType.visiblePassword,
+                maxLength: 10,
               ),
             ),
             Padding(
@@ -121,6 +130,7 @@ class Cadastro extends StatelessWidget {
                   icon: Icon(Icons.vpn_key),
                 ),
                 keyboardType: TextInputType.visiblePassword,
+                maxLength: 10,
               ),
             ),
             Padding(
@@ -141,6 +151,9 @@ class Cadastro extends StatelessWidget {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
+                      debugPrint(data.text);
+                      debugPrint(maskDate.getMaskedText());
+
                       if (nome.text == null || nome.text.trim() == "")
                         return Alerta("Erro", "Preencha o nome.");
 
