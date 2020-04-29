@@ -24,11 +24,11 @@ class Cadastro extends StatelessWidget {
         child: Column (
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(24.0),
+              padding: const EdgeInsets.all(20),
               child: TextField(
                 controller: nome,
                 style: TextStyle(
-                  fontSize: 24.0 
+                  fontSize: 18
                 ),
                 decoration: InputDecoration(
                   labelText: "Nome:",
@@ -38,11 +38,11 @@ class Cadastro extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(24.0),
+              padding: const EdgeInsets.all(20),
               child: TextField(
                 controller: data,
                 style: TextStyle(
-                  fontSize: 24.0 
+                  fontSize: 18 
                 ),
                 decoration: InputDecoration(
                   labelText: "Data de Nascimento:",
@@ -52,11 +52,11 @@ class Cadastro extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(24.0),
+              padding: const EdgeInsets.all(20),
               child: TextField(
                 controller: email,
                 style: TextStyle(
-                  fontSize: 24.0 
+                  fontSize: 18 
                 ),
                 decoration: InputDecoration(
                   labelText: "Email:",
@@ -66,11 +66,11 @@ class Cadastro extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(24.0),
+              padding: const EdgeInsets.all(20),
               child: TextField(
                 controller: estado,
                 style: TextStyle(
-                  fontSize: 24.0 
+                  fontSize: 18 
                 ),
                 decoration: InputDecoration(
                   labelText: "Estado:",
@@ -80,11 +80,11 @@ class Cadastro extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(24.0),
+              padding: const EdgeInsets.all(20),
               child: TextField(
                 controller: cidade,
                 style: TextStyle(
-                  fontSize: 24.0 
+                  fontSize: 18
                 ),
                 decoration: InputDecoration(
                   labelText: "Cidade:",
@@ -94,12 +94,12 @@ class Cadastro extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(24.0),
+              padding: const EdgeInsets.all(20),
               child: TextField(
                 controller: password,
                 obscureText: true,
                 style: TextStyle(
-                  fontSize: 24.0 
+                  fontSize: 18 
                 ),
                 decoration: InputDecoration(
                   labelText: "Senha:",
@@ -109,12 +109,12 @@ class Cadastro extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(24.0),
+              padding: const EdgeInsets.all(20),
               child: TextField(
                 controller: password2,
                 obscureText: true,
                 style: TextStyle(
-                  fontSize: 24.0 
+                  fontSize: 18 
                 ),
                 decoration: InputDecoration(
                   labelText: "Confirme a Senha:",
@@ -123,44 +123,53 @@ class Cadastro extends StatelessWidget {
                 keyboardType: TextInputType.visiblePassword,
               ),
             ),
-            RaisedButton(
-              child: Text("Cadastrar",
-                style: TextStyle(color: Colors.white, fontSize: 30.0)
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: RaisedButton(
+                child: Text(
+                  "Cadastrar",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold
+                  )
+                ),
+                color: Colors.green,
+                textColor: Colors.white,
+                padding: EdgeInsets.all(10),
+                highlightColor: Colors.yellow[300],
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      if (nome.text == null || nome.text.trim() == "")
+                        return Alerta("Erro", "Preencha o nome.");
+
+                      if (data.text == null || data.text.trim() == "")
+                        return Alerta("Erro", "Preencha a data.");
+
+                      if (email.text == null || email.text.trim() == "")
+                        return Alerta("Erro", "Preencha o e-mail.");
+
+                      if (estado.text == null || estado.text.trim() == "")
+                        return Alerta("Erro", "Preencha o estado.");
+
+                      if (cidade.text == null || cidade.text.trim() == "")
+                        return Alerta("Erro", "Preencha a cidade.");
+
+                      if (password.text == null || password.text.trim() == "")
+                        return Alerta("Erro", "Preencha a senha.");
+
+                      if (password2.text != password.text)
+                        return Alerta("Erro", "Confirmação de senha incorreta!");
+
+                      final user = new User(nome.text, email.text, data.text, estado.text, cidade.text, password.text);
+
+                      return Login(user);
+                    }
+                  );
+                },
               ),
-              color: Colors.green,
-              highlightColor: Colors.yellow[300],
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    if (nome.text == null || nome.text.trim() == "")
-                      return Alerta("Erro", "Preencha o nome.");
-
-                    if (data.text == null || data.text.trim() == "")
-                      return Alerta("Erro", "Preencha a data.");
-
-                    if (email.text == null || email.text.trim() == "")
-                      return Alerta("Erro", "Preencha o e-mail.");
-
-                    if (estado.text == null || estado.text.trim() == "")
-                      return Alerta("Erro", "Preencha o estado.");
-
-                    if (cidade.text == null || cidade.text.trim() == "")
-                      return Alerta("Erro", "Preencha a cidade.");
-
-                    if (password.text == null || password.text.trim() == "")
-                      return Alerta("Erro", "Preencha a senha.");
-
-                    if (password2.text != password.text)
-                      return Alerta("Erro", "Confirmação de senha incorreta!");
-
-                    final user = new User(nome.text, email.text, data.text, estado.text, cidade.text, password.text);
-
-                    return Login(user);
-                  }
-                );
-              },
-            ),
+            )
           ]
         )
       )

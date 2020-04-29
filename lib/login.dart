@@ -24,11 +24,11 @@ class Login extends StatelessWidget {
         child: Column (
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(24.0),
+              padding: const EdgeInsets.all(20),
               child: TextField(
                 controller: email,
                 style: TextStyle(
-                  fontSize: 24.0 
+                  fontSize: 18 
                 ),
                 decoration: InputDecoration(
                   labelText: "Email:",
@@ -38,12 +38,12 @@ class Login extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(24.0),
+              padding: const EdgeInsets.all(20),
               child: TextField(
                 controller: password,
                 obscureText: true,
                 style: TextStyle(
-                  fontSize: 24.0 
+                  fontSize: 18 
                 ),
                 decoration: InputDecoration(
                   labelText: "Senha:",
@@ -52,30 +52,44 @@ class Login extends StatelessWidget {
                 keyboardType: TextInputType.visiblePassword,
               ),
             ),
-            RaisedButton(
-              child: Text("Entrar",
-                style: TextStyle(color: Colors.white, fontSize: 30.0)
+            Padding(
+              padding: EdgeInsets.all(20),
+              child: RaisedButton(
+                child: Text(
+                  "Entrar",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold
+                  )
+                ),
+                color: Colors.green,
+                textColor: Colors.white,
+                padding: EdgeInsets.all(10),
+                highlightColor: Colors.yellow[300],
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Home(new User("Nathália Lopes", "nathalialcoimbra@gmail.com", "18/04/1992", "SP", "São Paulo", "12345"));
+
+                      /*if (email.text != _user.email || password.text != _user.senha)
+                        return Alerta("Erro", "Login e/ou senha incorretos!");
+
+                      return Home(_user);*/
+                    }
+                  );
+                },
               ),
-              color: Colors.green,
-              highlightColor: Colors.yellow[300],
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Home(new User("Nathália Lopes", "nathalialcoimbra@gmail.com", "18/04/1992", "SP", "São Paulo", "12345"));
-
-                    /*if (email.text != _user.email || password.text != _user.senha)
-                      return Alerta("Erro", "Login e/ou senha incorretos!");
-
-                    return Home(_user);*/
-                  }
-                );
-              },
             ),
             Padding(
-              padding: const EdgeInsets.all(24.0),
+              padding: const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 10),
               child: InkWell(
-                child: Text("Cadastre-se"),
+                child: Text(
+                  "Cadastre-se",
+                  style: TextStyle(
+                    color: Colors.blue
+                  ),
+                ),
                 onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Cadastro()))
               ),
             ),

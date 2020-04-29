@@ -44,14 +44,23 @@ class Home extends StatelessWidget {
                     children: <Widget>[
                       InkWell(
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => Consulta()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => Consulta(_user)));
                         },
                         child: Container (
                           margin: EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 20),
                           padding: EdgeInsets.all(20),
-                          color: Color.fromRGBO(242,156,33,1),
                           width: 180,
                           height: 240,
+                          decoration: BoxDecoration(
+                            color: Color.fromRGBO(242,156,33,1),
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                            boxShadow: [BoxShadow(
+                              color: Color.fromRGBO(242,156,33,0.5),
+                              blurRadius: 4.0,
+                              spreadRadius: 2.0,
+                              offset: Offset(0,0),
+                            )]
+                          ),
                           child: Column(
                             children: <Widget>[
                               Image(
@@ -77,9 +86,18 @@ class Home extends StatelessWidget {
                         child: Container (
                           margin: EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 20),
                           padding: EdgeInsets.all(20),
-                          color: Color.fromRGBO(85,153,255,1),
                           width: 180,
                           height: 240,
+                          decoration: BoxDecoration(
+                            color: Color.fromRGBO(85,153,255,1),
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                            boxShadow: [BoxShadow(
+                              color: Color.fromRGBO(85,153,255,0.5),
+                              blurRadius: 4.0,
+                              spreadRadius: 2.0,
+                              offset: Offset(0,0),
+                            )]
+                          ),
                           child: Column(
                             children: <Widget>[
                               Image(
@@ -135,7 +153,7 @@ class Home extends StatelessWidget {
               ),
             ),
             new ListTile(
-              title: Text("Covid-19"),
+              title: Text("Notícias"),
               onTap: () {
                 Navigator.of(context).pop();
                 Navigator.push(
@@ -144,10 +162,10 @@ class Home extends StatelessWidget {
               },
             ),
             new ListTile(
-              title: Text("Consulta"),
+              title: Text("Teste de Covid-19"),
               onTap: () {
                 Navigator.of(context).pop();
-                Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) => Consulta()));
+                Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) => Consulta(_user)));
               },
             ),
             new ListTile(
