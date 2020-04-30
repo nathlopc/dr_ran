@@ -5,17 +5,27 @@ import 'login.dart';
 import 'util/alerta.dart';
 import 'models/userModel.dart';
 
-class Cadastro extends StatelessWidget {
+class Cadastro extends StatefulWidget {
 
   final nome = TextEditingController();
   final data = TextEditingController();
   final email = TextEditingController();
+  String sexo = "";  
+  double size = 18;
   final password = TextEditingController();
   final password2 = TextEditingController();
   final estado = TextEditingController();
   final cidade = TextEditingController();
 
   var maskDate = new MaskTextInputFormatter(mask: '##/##/####', filter: {"#": RegExp(r'[0-9]')});
+
+  @override
+  State<StatefulWidget> createState() {
+    return Formulario();
+  }
+}
+
+class Formulario extends State<Cadastro> {
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +39,7 @@ class Cadastro extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(20),
               child: TextField(
-                controller: nome,
+                controller: widget.nome,
                 style: TextStyle(
                   fontSize: 18
                 ),
@@ -44,7 +54,7 @@ class Cadastro extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(20),
               child: TextField(
-                controller: data,
+                controller: widget.data,
                 style: TextStyle(
                   fontSize: 18 
                 ),
@@ -53,13 +63,79 @@ class Cadastro extends StatelessWidget {
                   icon: Icon(Icons.calendar_today)
                 ),
                 keyboardType: TextInputType.datetime,
-                inputFormatters: [maskDate],
+                inputFormatters: [widget.maskDate],
               ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 40, left: 60),
+              child: Row (
+                children: <Widget>[
+                  Text(
+                    "Sexo:",
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: widget.size
+                    ),
+                  ),
+                ]
+              )
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 0, bottom: 20, left: 20, right: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    width: 190,
+                    child: ListTile (
+                      leading: Radio(
+                        value: 'M',
+                        groupValue: widget.sexo,
+                        onChanged: (String _sexo) {
+                          setState(() {
+                            widget.sexo = _sexo;
+                            widget.size = 12;
+                          });
+                        },
+                      ),
+                      title: Text(
+                        "Masculino",
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black54
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: 180,
+                    child: ListTile(
+                      leading: Radio(
+                        value: 'F',
+                        groupValue: widget.sexo,
+                        onChanged: (String _sexo) {
+                          setState(() {
+                            widget.sexo = _sexo;
+                            widget.size = 12;
+                          });
+                        },
+                      ),
+                      title: Text(
+                        "Feminino",
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black54
+                        ),  
+                      )
+                    )
+                  )
+                ]
+              )
             ),
             Padding(
               padding: const EdgeInsets.all(20),
               child: TextField(
-                controller: email,
+                controller: widget.email,
                 style: TextStyle(
                   fontSize: 18 
                 ),
@@ -74,7 +150,7 @@ class Cadastro extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(20),
               child: TextField(
-                controller: estado,
+                controller: widget.estado,
                 style: TextStyle(
                   fontSize: 18 
                 ),
@@ -89,7 +165,7 @@ class Cadastro extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(20),
               child: TextField(
-                controller: cidade,
+                controller: widget.cidade,
                 style: TextStyle(
                   fontSize: 18
                 ),
@@ -104,7 +180,7 @@ class Cadastro extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(20),
               child: TextField(
-                controller: password,
+                controller: widget.password,
                 obscureText: true,
                 style: TextStyle(
                   fontSize: 18 
@@ -120,7 +196,7 @@ class Cadastro extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(20),
               child: TextField(
-                controller: password2,
+                controller: widget.password2,
                 obscureText: true,
                 style: TextStyle(
                   fontSize: 18 
@@ -151,31 +227,30 @@ class Cadastro extends StatelessWidget {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      debugPrint(data.text);
-                      debugPrint(maskDate.getMaskedText());
+                      debugPrint('sexo: ' + widget.sexo);
 
-                      if (nome.text == null || nome.text.trim() == "")
+                      if (widget.nome.text == null || widget.nome.text.trim() == "")
                         return Alerta("Erro", "Preencha o nome.");
 
-                      if (data.text == null || data.text.trim() == "")
+                      if (widget.data.text == null || widget.data.text.trim() == "")
                         return Alerta("Erro", "Preencha a data.");
 
-                      if (email.text == null || email.text.trim() == "")
+                      if (widget.email.text == null || widget.email.text.trim() == "")
                         return Alerta("Erro", "Preencha o e-mail.");
 
-                      if (estado.text == null || estado.text.trim() == "")
+                      if (widget.estado.text == null || widget.estado.text.trim() == "")
                         return Alerta("Erro", "Preencha o estado.");
 
-                      if (cidade.text == null || cidade.text.trim() == "")
+                      if (widget.cidade.text == null || widget.cidade.text.trim() == "")
                         return Alerta("Erro", "Preencha a cidade.");
 
-                      if (password.text == null || password.text.trim() == "")
+                      if (widget.password.text == null || widget.password.text.trim() == "")
                         return Alerta("Erro", "Preencha a senha.");
 
-                      if (password2.text != password.text)
+                      if (widget.password2.text != widget.password.text)
                         return Alerta("Erro", "Confirmação de senha incorreta!");
 
-                      final user = new User(nome.text, email.text, data.text, estado.text, cidade.text, password.text);
+                      final user = new User(widget.nome.text, widget.email.text, widget.data.text, widget.sexo, widget.estado.text, widget.cidade.text, widget.password.text);
 
                       return Login(user);
                     }
