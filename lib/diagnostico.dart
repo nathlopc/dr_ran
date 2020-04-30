@@ -229,7 +229,7 @@ class Orientacao extends State<Diagnostico> {
                       ),
                     )
                   ),
-                  Padding (
+                 /* Padding (
                     padding: EdgeInsets.all(0),
                     child: Container(
                       width: 500,
@@ -265,7 +265,7 @@ class Orientacao extends State<Diagnostico> {
                         ),
                       )
                     ),
-                  )
+                  )*/
                 ],
               )
             )
