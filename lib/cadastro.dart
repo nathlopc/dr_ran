@@ -235,6 +235,9 @@ class Formulario extends State<Cadastro> {
                       if (widget.data.text == null || widget.data.text.trim() == "")
                         return Alerta("Erro", "Preencha a data.");
 
+                      if (widget.sexo == null || widget.sexo == "")
+                        return Alerta("Erro", "Selecione o sexo.");
+
                       if (widget.email.text == null || widget.email.text.trim() == "")
                         return Alerta("Erro", "Preencha o e-mail.");
 
