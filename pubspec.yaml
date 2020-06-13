@@ -52,6 +52,7 @@ flutter:
     - assets/images/frog2.png
     - assets/images/frog3.png
     - assets/images/frog4.png
+    - assets/images/guide.png
   fonts:
     - family: BradleyHandITC
       fonts:

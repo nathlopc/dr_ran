@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'dart:async';
-import '../components/menuBar.dart';
 import '../home.dart';
 import '../models/userModel.dart';
 
