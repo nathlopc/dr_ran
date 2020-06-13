@@ -2,40 +2,44 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'models/newsModel.dart';
 import 'cards/news.dart';
+import 'components/menuBar.dart';
+import 'data/newsapi.dart';
+import 'components/section.dart';
+import 'models/userModel.dart';
 
-class News extends StatefulWidget {
+class News extends StatelessWidget {
 
-  final List<NewsModel> _news = new List();
-  
-  @override
-  State<StatefulWidget> createState() {
-    getList();
-    return ListaNews();
-  }
-
-  void getList() {
-    _news.add(new NewsModel("Coronavírus: Teich diz que governo vai distribuir 272 respiradores a estados", "Ministro da Saúde também falou que enviará mais um milhão de testes rápidos", "https://ogimg.infoglobo.com.br/in/24384696-ab4-39b/FT1086A/652/xrespiradores.jpg.pagespeed.ic.gK2GBcj89d.jpg", "O ministro da Saúde, Nelson Teich, afirmou em ume rede social neste sábado que o governo recebeu 272 respiradores fabricados no Brasil e começou a enviar os equipamentos aos estados. Segundo ele, serão 14.100 respiradores no total, utilizados em casos graves do novo coronavírus. O ministro afirmou que o Amazonas já recebeu 35 respiradores e deve receber mais 20. O estado é um dos mais afetados pela pandemia, com 3.635 casos confirmados da doença e 287 mortes, segundo o balanço da Secretaria de Saúde do Amazonas deste sábado. O Paraná também deve receber mais cinco respiradores, além dos 15 já entregues.Os outros estados contemplados foram Amapá (25), Ceará (45), Espírito Santo (10), Pará (20), Piauí (20), Rio de Janeiro (40) e Santa Catarina (17). ""Com isso, estamos equipando melhor os hospitais para receber os pacientes com Covid-19"", afirmou no Twitter. De acordo com o último balanço do Ministério da Saúde, o Brasil tem 52.995 infectados com a Covid-19 e 3.670 mortes provocadas pela doença. Teich disse que o ministério vai enviar nos próximos dias quase 1 milhão de testes rápidos para os estados, chegando a um total de 3 milhões. De acordo com ele, essa medida é ""fundamental para respostas mais assertivas ao Covid-19"". Em seu discurso de posse, o oncologista defendeu a necessidade de ampliar a testagem para a doença no Brasil, mas já ressaltou mais de uma vez que não haverá exames para toda a população. Segundo Teich, o até o fim da semana, o governo federal terá entregue também 79 milhões de equipamentos de proteção individual (EPIs), utilizados para proteger profissionais de saúde da doença."));
-    _news.add(new NewsModel("Governador de Alagoas testa positivo para novo coronavírus", "Renan Filho anunciou resultado do teste nas redes sociais e disse que está em casa, sem sintomas graves.", "https://s2.glbimg.com/x1gE4u2q4S2Nz5ODh3Zu0Fxz06w=/0x0:889x513/1000x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_59edd422c0c84a879bd37670ae4f538a/internal_photos/bs/2020/K/7/LoV3l2S0aGo2OYCnOW7A/governador-renan-filho.jpg", "O governador de Alagoas, Renan Filho (MDB), testou positivo para o novo coronavírus. Ele anunciou o resultado do exame na tarde deste sábado (25), em seu perfil nas redes sociais. Em todo o estado, são 501 casos confirmados e 29 óbitos. Renan Filho fez o primeiro teste no dia 18 de abril, depois de o secretário estadual da Fazenda, George Santoro, anunciar que estava com Covid-19, doença causada pelo novo coronavírus. Dias antes, os dois estiveram reunidos definindo ações para combater a crise causada pela pandemia. O primeiro exame, porém, deu negativo. Depois disso, o governador continuou trabalhando, e não havia informação de que ele tinha feito um novo teste, até a divulgação do resultado do segundo exame, nesta tarde. ""Essa doença é perigosa! Não há verdade absoluta, estamos todos apreendendo diariamente a combatê-la. Quem está na linha de frente: médicos, enfermeiros e outros profissionais de saúde, precisam de ainda mais cuidados. Os que estão na gestão do AL contra o Covid-19 também"", alertou Renan Filho."));
-    _news.add(new NewsModel("Mutações podem estar alterando a capacidade infecciosa do coronavírus", "Estudo ainda está em fase preliminar, mas pode ajudar a ciência a rastrear a transmissão da Covid-19", "https://s2.glbimg.com/gqSvA3ZrySnN9P5bT10A2kscCc8=/e.glbimg.com/og/ed/f/original/2015/06/17/coronavirus.jpg", "Com mais de 2,7 milhões de casos pelo mundo todo, o coronavírus é o grande objeto de estudo da ciência no momento. Uma das mais recentes pesquisas sobre o assunto sugere que o vírus tem passado por mutações capazes de mudar a sua patogenicidade – isto é, a sua capacidade infecciosa –, o que pode ajudar pesquisadores a rastrearem melhor a transmissão da Covid-19. Ainda em fase preliminar, o estudo foi conduzido por cientistas da Universidade de Zhejiang, na China, e foi submetido para revisão no site medRxiv. Ao analisarem mutações em 11 amostras coletadas de pacientes com Covid-19, eles detectaram 33 mutações no genoma do coronavírus, sendo 19 delas novas. Não foi apenas esse número o que chamou a atenção dos especialistas: eles também perceberam diferenças significativas nas cargas virais de pacientes com diferentes cepas, o que, para eles, poderia ser uma ""evidência de que a síndrome respiratória aguda grave 2 (SARS-CoV-2) ganhou mutações capazes de alterar substancialmente a sua patogenicidade"". Além disso, durante a pesquisa, os cientistas infectaram células usando as cepas coletadas dos pacientes, que apresentavam diferentes mutações. Então, verificaram que até 270 vezes mais carga viral era gerada entre as cepas mais fracas e as mais agressivas. ""A verdadeira diversidade das cepas virais ainda é bastante subestimada"", escreveram os autores no estudo, que ainda passa por avaliações de outros cientistas quanto aos seus métodos e à precisão de seus dados. É importante observar que mutações de vírus são comuns, uma vez que esses micro-organismos se replicam imperfeitamente dentro das células de seus hospedeiros. Por isso, cientistas da Universidade de Cambridge acreditam que já existam três variantes do SARS-CoV-2 pelo mundo. No Brasil, até 24 de abril, foram confirmados pelo Ministério da Saúde 52.995 casos de Covid-19. O País soma 3.670 óbitos pela doença, sendo a região Sudeste a mais afetada, com 51,1% do número de infectados."));
-    _news.add(new NewsModel("OMS alerta para a incerteza sobre casos de reinfecção", "Agência das Nações Unidas alerta que emissão de 'passaportes de imunidade' ou 'certificados sem risco' para pessoas que foram infectadas pode aumentar o risco de propagação.", "https://s2.glbimg.com/T63gBXoZFKjcp1AcYi3IksS51QM=/0x0:6720x4480/1000x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_59edd422c0c84a879bd37670ae4f538a/internal_photos/bs/2020/u/n/b3rCTDQRm7Xp7B7J503g/berlim.jpg", "A Organização Mundial da Saúde (OMS) informou neste sábado (25) que atualmente ""não há evidências"" de que as pessoas que se recuperaram da Covid-19 e tenham anticorpos estão protegidas contra uma segunda infecção por coronavírus. Em um comunicado, a agência das Nações Unidas alertou contra a emissão de ""passaportes de imunidade"" ou ""certificados sem risco"" para pessoas que foram infectadas, dizendo que a prática pode realmente aumentar o risco de propagação, pois pode ignorar o conselho padrão. O Chile disse na semana passada que começaria a distribuir ""passaportes de saúde"" para pessoas consideradas recuperadas da doença. Uma vez rastreados para determinar se eles desenvolveram anticorpos para torná-los imunes ao vírus, eles poderiam voltar imediatamente ao trabalho. A iniciativa também já é cogitada nos Estados Unidos, Alemanha, Reino Unido e Espanha. No começo do mês, o ministro da Economia, Paulo Guedes, afirmou que estava negociando com um parceiro da Inglaterra a implementação do ""passaporte da imunidade"". Sem detalhar a medida, Guedes disse que estaria em discussão pelo governo a disponibilização para o Brasil de 40 milhões de testes por mês para o coronavírus."));
-    _news.add(new NewsModel("São Paulo registra 1ª morte de um bebê por covid-19; casos passam de 20 mil", "", "https://conteudo.imguol.com.br/c/noticias/a0/2020/04/23/profissionais-de-saude-que-usam-mascaras-protetoras-seguram-flores-na-frente-de-cruzes-em-homenagem-a-colega-de-trabalho-maria-dos-santos-uma-enfermeira-que-morreu-da-doenca-por-coronavirus-em-meio-ao-1587693929784_v2_900x506.jpg", "A secretaria de Saúde de São Paulo confirmou hoje a morte na capital de um bebê de sete meses, com comorbidades, por conta do coronavírus. Segundo o governo, é o primeiro óbito na faixa etária entre 0 e 10 anos. O estado já contabiliza mais de 20.004 casos do coronavírus em 284 municípios, número que representa 44% do território estadual. No total, 1.667 mortes já foram confirmadas — 155 óbitos nas últimas 24 horas. Já há pelo menos um óbito em 128 cidades, ou seja, uma a cada cinco do Estado. A concentração na Capital é de aproximadamente 65% dos casos e 66% das mortes, percentual que vem caindo à medida que ocorre o avanço da doença para interior, litoral e Grande São Paulo, que já somam 568 óbitos e 6.906 casos. Entre as vítimas fatais, segundo a secretaria, estão 974 homens e 693 mulheres. Os óbitos continuam concentrados em pacientes com 60 anos ou mais, totalizando 75,4% das mortes. A mortalidade é maior entre 70 e 79 anos (425 do total), seguida por 60-69 anos (375) e 80-89 (330). Também morreram 127 pessoas com mais de 90 anos. Fora deste grupo de idosos, há também alta mortalidade entre pessoas de 50 a 59 anos (211 do total), seguida pelas faixas de 40 a 49 (120), 30 a 39 (60), 20 a 29 (14) e 10 a 19 (4), e 1 com menos de dez anos. A taxa de ocupação dos leitos para atendimentos covid em UTI no Estado de São Paulo está em 58,9%. É maior na Grande São Paulo, onde é de 77,3% neste sábado."));
-  }
-}
-
-class ListaNews extends State<News> {
+  final User _user;
+  News(this._user);
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Covid-19")
-      ),
-      body: ListView.builder(
-        itemCount: widget._news.length,
-        itemBuilder: (context, index) {
-          final news = widget._news[index];
-          return NewsItem(news);
+      appBar: MenuBar(appBar: AppBar()),
+      body: FutureBuilder<List<NewsModel>>(
+        future: NewsAPI().getNews(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+              itemCount: snapshot.data.length,
+              itemBuilder: (context, index) {
+                final news = snapshot.data[index];
+                return NewsItem(news, _user);
+              }
+            );
+          }
+          else if (snapshot.hasError)
+            return Center(
+              child: Text(
+                "Não há notícias",
+                style: TextStyle(
+                  color: Colors.black38,
+                  fontSize: 18
+                )
+              )
+            );
+
+          return Center(child: CircularProgressIndicator());
         }
       )
     );

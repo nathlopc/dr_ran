@@ -1,61 +1,47 @@
 import 'package:flutter/material.dart';
-import '../models/newsModel.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'dart:async';
+import '../components/menuBar.dart';
+import '../home.dart';
+import '../models/userModel.dart';
 
 class NewsDetail extends StatelessWidget {
-  
-  final NewsModel _news;
+  Completer<WebViewController> _controller = Completer<WebViewController>();
+  final String _url;
+  final User _user;
 
-  NewsDetail(this._news);
+  NewsDetail(this._url, this._user);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Últimas Notícias"),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.all(20),
-              child: Text(
-                _news.title, 
-                style: TextStyle(
-                  fontSize: 22, 
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87
-                ),
-              ),
+        title: Center(
+          child: Text(
+            "dr. ran",
+            style: TextStyle(
+              fontFamily: 'BradleyHandITC',
+              fontStyle: FontStyle.italic,
+              fontWeight: FontWeight.bold,
+              fontSize: 24
             ),
-            Padding(
-              padding: EdgeInsets.only(left: 20, right: 20),
-              child: Text(
-                _news.subtitle,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontStyle: FontStyle.italic,
-                  color: Colors.black54
-                ),
-              )
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 20),
-              child: Image(
-                image: new NetworkImage(_news.image)
-              )
-            ),
-            Padding(
-              padding: EdgeInsets.all(20),
-              child: Text(
-                _news.content,
-                style: TextStyle(
-                  fontSize: 14
-                ),
-                textAlign: TextAlign.justify,
-              )
-            )
-          ],
+          )
         ),
+        backgroundColor: Color.fromRGBO(51, 51, 51, 1),
+        automaticallyImplyLeading: false,
+        actions: <Widget>[
+          IconButton(
+            icon: new Icon(Icons.close),
+            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Home(_user)))
+          ),
+        ],
+      ),
+      body: WebView(
+        initialUrl: _url,
+        onWebViewCreated: (WebViewController webViewController) {
+          _controller.complete(webViewController);
+        },
       )
     );
   }

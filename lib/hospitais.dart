@@ -32,19 +32,32 @@ class Hospitais extends StatelessWidget {
                 endereco: item.data["endereco"]
               ));
             }
+
+            return Padding(
+              padding: EdgeInsets.only(left: 15, right: 15),
+              child: GroupedListView<dynamic, String>(
+                elements: hospitals,
+                groupBy: (element) => element.estado,
+                groupSeparatorBuilder: (String value) => Section(value),
+                itemBuilder: (context, element) {
+                  return Hospital(element);
+                },
+                order: GroupedListOrder.ASC,
+              )
+            );
           }
-          return Padding(
-            padding: EdgeInsets.only(left: 15, right: 15),
-            child: GroupedListView<dynamic, String>(
-              elements: hospitals,
-              groupBy: (element) => element.estado,
-              groupSeparatorBuilder: (String value) => Section(value),
-              itemBuilder: (context, element) {
-                return Hospital(element);
-              },
-              order: GroupedListOrder.ASC,
-            )
-          );
+          else if (snapshot.hasError)
+            return Center(
+              child: Text(
+                "Não há hospitais",
+                style: TextStyle(
+                  color: Colors.black38,
+                  fontSize: 18
+                ),
+              ),
+            );
+
+          return Center(child: CircularProgressIndicator());
         }
       )
     );

@@ -2,18 +2,20 @@ import 'package:dr_ran/details/news.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../models/newsModel.dart';
+import '../models/userModel.dart';
 
 class NewsItem extends StatelessWidget {
 
   final NewsModel _news;
-  NewsItem(this._news);
+  final User _user;
+  NewsItem(this._news, this._user);
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: new InkWell(
         onTap: () { 
-          Navigator.push(context, MaterialPageRoute(builder: (context) => NewsDetail(_news)));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => NewsDetail(_news.link, _user)));
         },
         child: Column(
           children: <Widget>[
@@ -23,7 +25,7 @@ class NewsItem extends StatelessWidget {
                 backgroundColor: Colors.red,
                 padding: const EdgeInsets.all(0),
                 label: Text(
-                  "Últimas notícias",
+                  _news.place,
                   style: TextStyle(
                     color: Colors.white,
                   )

@@ -3,7 +3,8 @@ class NewsModel {
   final String title;
   final String subtitle;
   final String image;
-  final String content;
+  final String link;
+  final String place;
 
-  NewsModel(this.title, this.subtitle, this.image, this.content);
+  NewsModel({this.title, this.subtitle, this.image, this.link, this.place});
 }
