@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "892974013143",
+    "firebase_url": "https://drran-273800.firebaseio.com",
+    "project_id": "drran-273800",
+    "storage_bucket": "drran-273800.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:892974013143:android:c4efd2c85ccb79a42e6e92",
+        "android_client_info": {
+          "package_name": "com.example.dr_ran"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "892974013143-3sn35odmm0nej8lg1o5ggacv97nmrbkg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaytSIg4J2dtJ-6P162M-72-3IE2EBtO8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "892974013143-3sn35odmm0nej8lg1o5ggacv97nmrbkg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

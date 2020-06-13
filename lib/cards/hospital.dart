@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/hospitalModel.dart';
+import 'package:string_mask/string_mask.dart';
 
 class Hospital extends StatefulWidget {
 
@@ -18,6 +19,7 @@ class Hospital extends StatefulWidget {
 class HospitalItem extends State<Hospital> {
   
   Future<void> _call;
+  var telefoneMask = new StringMask("## (##) ####-####");
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +32,10 @@ class HospitalItem extends State<Hospital> {
               widget._hospital.nome,
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Colors.black87,
-                fontWeight: FontWeight.w500,
-                fontSize: 18
+                fontFamily: 'BradleyHandITC',
+                color: Color.fromRGBO(112, 173, 71, 1),
+                fontWeight: FontWeight.bold,
+                fontSize: 20
               ),
             ),
           ),
@@ -42,27 +45,21 @@ class HospitalItem extends State<Hospital> {
               onTap: () {
                 var telefone = widget._hospital.telefone;
                 setState(() {
-                  _call = phoneCall('tel:' + telefone);
+                  if (telefone != null)
+                    _call = phoneCall('tel:' + telefone);
                 });
               },
               child: ListTile(
                 title: Text(
-                  widget._hospital.telefone,
+                  widget._hospital.telefone == null ? '-' : telefoneMask.apply(widget._hospital.telefone.replaceFirst('+', '')),
                   style: TextStyle(
-                    color: Colors.lightBlue
+                    color: Color.fromRGBO(68, 114, 196, 1)
                   ),
                 ),
                 leading: Icon(Icons.phone, size: 25,),
               ),
             ),
           ),
-          /*Padding(
-            padding: EdgeInsets.only(bottom: 0),
-            child: ListTile(
-              title: Text(widget._hospital.telefone, style: TextStyle(color: Colors.black54)),
-              leading: Icon(Icons.phone),
-            ),
-          ),*/
           Padding(
             padding: EdgeInsets.only(bottom: 20),
             child: InkWell(
@@ -73,7 +70,7 @@ class HospitalItem extends State<Hospital> {
                 title: Text(
                   widget._hospital.endereco,
                   style: TextStyle(
-                    color: Colors.lightBlue
+                    color: Color.fromRGBO(68, 114, 196, 1)
                   )
                 ),
                 leading: Icon(Icons.location_on, size: 30,),

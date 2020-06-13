@@ -6,5 +6,5 @@ class HospitalModel {
   final String estado;
   final String cidade;
 
-  HospitalModel(this.nome, this.endereco, this.telefone, this.estado, this.cidade);
+  HospitalModel({this.nome, this.endereco, this.telefone, this.estado, this.cidade});
 }
