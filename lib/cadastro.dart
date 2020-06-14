@@ -2,22 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'login.dart';
-import 'util/alerta.dart';
 import 'models/userModel.dart';
+import 'data/ibge.dart';
+import 'components/footer.dart';
+import 'components/section.dart';
+import 'data/firebase.dart';
 
 class Cadastro extends StatefulWidget {
-
-  final nome = TextEditingController();
-  final data = TextEditingController();
-  final email = TextEditingController();
-  String sexo = "";  
-  double size = 18;
-  final password = TextEditingController();
-  final password2 = TextEditingController();
-  final estado = TextEditingController();
-  final cidade = TextEditingController();
-
-  var maskDate = new MaskTextInputFormatter(mask: '##/##/####', filter: {"#": RegExp(r'[0-9]')});
 
   @override
   State<StatefulWidget> createState() {
@@ -27,241 +18,315 @@ class Cadastro extends StatefulWidget {
 
 class Formulario extends State<Cadastro> {
 
+  String nome, email, data, senha, senha2, estado, cidade, sexo;
+  var maskDate = new MaskTextInputFormatter(mask: '##/##/####', filter: {"#": RegExp(r'[0-9]')});
+  final cadastro = GlobalKey<FormState>();
+  
+  List<String> estados = new List();
+  List<String> cidades = new List();
+  List<String> sexos = new List();
+
+  @override
+  void initState() {
+    super.initState();
+    _getEstados();
+    _getSexos();
+  }
+
+  void _getSexos() {
+    setState(() {
+      sexos = ['Feminino', 'Masculino'];
+      sexo = sexos[0];
+    });
+  }
+
+  void _getEstados() async {
+    var result = await IBGEAPI().getEstados();
+    setState(() {
+      estados = result;
+      estados.sort((a, b) => a.toString().compareTo(b.toString()));
+      if (estados.length > 0)
+      {
+        estado = estados[0];
+        _getCidades();
+      }
+    });
+  }
+
+  void _getCidades() async {
+    var result = await IBGEAPI().getCidades(estado);
+    setState(() {
+      cidades = result;
+      if (cidades.length > 0)
+        cidade = cidades[0];
+    });
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Cadastro"),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: IconThemeData(
+          color: Color.fromRGBO(51, 51, 51, 1)
+        ),
       ),
+      bottomSheet: Footer(),
       body: SingleChildScrollView(
-        child: Column (
+       child: Column (
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: TextField(
-                controller: widget.nome,
-                style: TextStyle(
-                  fontSize: 18
-                ),
-                decoration: InputDecoration(
-                  labelText: "Nome:",
-                  icon: Icon(Icons.person)
-                ),
-                keyboardType: TextInputType.text,
-                maxLength: 50,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: TextField(
-                controller: widget.data,
-                style: TextStyle(
-                  fontSize: 18 
-                ),
-                decoration: InputDecoration(
-                  labelText: "Data de Nascimento:",
-                  icon: Icon(Icons.calendar_today)
-                ),
-                keyboardType: TextInputType.datetime,
-                inputFormatters: [widget.maskDate],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 40, left: 60),
-              child: Row (
-                children: <Widget>[
-                  Text(
-                    "Sexo:",
+            Stack (
+              children: <Widget>[
+                Positioned (
+                  width: MediaQuery.of(context).size.width,
+                  top: 10,
+                  left: 30,
+                  child: Text(
+                    "dr. ran",
                     style: TextStyle(
-                      color: Colors.black54,
-                      fontSize: widget.size
+                      fontFamily: "BradleyHandITC",
+                      fontSize: 50
                     ),
                   ),
-                ]
-              )
+                ),
+                Padding (
+                  padding: EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 20),
+                  child: Image(
+                    image: AssetImage('assets/images/frog2.png'),
+                  ),
+                )
+              ],
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 0, bottom: 20, left: 20, right: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+              padding: EdgeInsets.only(left: 15, right: 15),
+              child: Section("Cadastro")
+            ),
+            Form(
+              key: cadastro,
+              child: Column(
                 children: <Widget>[
-                  Container(
-                    width: 190,
-                    child: ListTile (
-                      leading: Radio(
-                        value: 'M',
-                        groupValue: widget.sexo,
-                        onChanged: (String _sexo) {
-                          setState(() {
-                            widget.sexo = _sexo;
-                            widget.size = 12;
-                          });
-                        },
+                  Padding (
+                    padding: EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 10),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: "Nome"
                       ),
-                      title: Text(
-                        "Masculino",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black54
-                        ),
-                      ),
+                      onSaved: (field) => nome = field.trim().toString(),
+                      validator: (nome) => nome.isEmpty || nome.trim().length == 0 ? 'Campo obrigatório' : null,
                     ),
                   ),
-                  Container(
-                    width: 180,
-                    child: ListTile(
-                      leading: Radio(
-                        value: 'F',
-                        groupValue: widget.sexo,
-                        onChanged: (String _sexo) {
-                          setState(() {
-                            widget.sexo = _sexo;
-                            widget.size = 12;
-                          });
-                        },
+                  Padding (
+                    padding: EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 10),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: "Data de Nascimento (DD/MM/AAAA)"
                       ),
-                      title: Text(
-                        "Feminino",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black54
-                        ),  
+                      inputFormatters: [maskDate],
+                      onSaved: (field) => data = field,
+                      validator: (data) => data.isEmpty || data.trim().length == 0 ? 'Campo obrigatório' : null,
+                    ),
+                  ),  
+                  Padding (
+                    padding: EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 10),
+                    child: InputDecorator(
+                      decoration: InputDecoration(
+                        errorStyle: TextStyle(color: Colors.redAccent, fontSize: 16.0),
+                        hintText: 'Selecione...',
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0))
+                      ),
+                      isEmpty: sexo == '',
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: sexo,
+                          isDense: true,
+                          onChanged: (String value) {
+                            setState(() {
+                              sexo = value;
+                            });
+                          },
+                          items: <String>['Masculino', 'Feminino'].map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+                      )
+                    )
+                  ),
+                  Padding (
+                    padding: EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 10),
+                    child: InputDecorator(
+                      decoration: InputDecoration(
+                        errorStyle: TextStyle(color: Colors.redAccent, fontSize: 16.0),
+                        hintText: 'Selecione...',
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0))
+                      ),
+                      isEmpty: estado == '',
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: estado,
+                          isDense: true,
+                          onChanged: (String value) {
+                            setState(() {
+                              estado = value;
+                              cidades = new List<String>();
+                              _getCidades();
+                            });
+                          },
+                          items: estados.map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+                      )
+                    )
+                  ),
+                  Padding (
+                    padding: EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 10),
+                    child: InputDecorator(
+                      decoration: InputDecoration(
+                        errorStyle: TextStyle(color: Colors.redAccent, fontSize: 16.0),
+                        hintText: 'Selecione...',
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0))
+                      ),
+                      isEmpty: cidade == '',
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: cidade,
+                          isDense: true,
+                          onChanged: (String value) {
+                            setState(() {
+                              cidade = value;
+                            });
+                          },
+                          items: cidades.map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+                      )
+                    )
+                  ),
+                  Padding (
+                    padding: EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 10),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: "E-mail"
+                      ),
+                      onSaved: (field) => email = field.trim().toString(),
+                      validator: (email) {
+                        if (email.isEmpty || email.trim().length == 0)
+                          return 'Campo obrigatório';
+                        
+                        if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email.trim()))
+                          return 'E-mail inválido';
+
+                        return null;
+                      }
+                    ),
+                  ),
+                  Padding (
+                    padding: EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 10),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: "Senha"
+                      ),
+                      obscureText: true,
+                      onSaved: (field) => senha = field.trim().toString(),
+                      validator: (senha) {
+                        if (senha.isEmpty || senha.trim().length == 0)
+                          return "Campo obrigatório";
+
+                        if (senha.length < 6)
+                          return "Senha deve ter no mínimo 6 caracteres";
+
+                        return null;
+                      }
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 15, bottom: 15),
+                      child: SizedBox (
+                        width: MediaQuery.of(context).size.width - 80,
+                        child: RaisedButton(
+                          padding: EdgeInsets.all(15),
+                          child: Text(
+                            "Cadastrar",
+                            style: TextStyle(
+                              fontSize: 16
+                            ),
+                          ),
+                          color: Color.fromRGBO(245, 245, 245, 1),
+                          textColor: Color.fromRGBO(112, 173, 71, 1),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            side: BorderSide(
+                              color: Color.fromRGBO(112, 173, 71, 1)
+                            )
+                          ),
+                          onPressed: () async {
+                            if (cadastro.currentState.validate()) {
+                              cadastro.currentState.save();
+                              
+                              var user = new User(nome: nome, email: email, data: data, cidade: cidade, estado: estado, senha: senha, sexo: sexo);
+                              
+                              await FirebaseAPI().insertUser(user).then((sucesso) {
+                                cadastro.currentState.reset();
+
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+                              });
+                            }
+                          }
+                        ),
+                      )
+                    )
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 40),
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 15, bottom: 15),
+                        child: SizedBox (
+                          width: MediaQuery.of(context).size.width - 80,
+                          child: RaisedButton(
+                            padding: EdgeInsets.all(15),
+                            child: Text(
+                              "Entrar",
+                              style: TextStyle(
+                                fontSize: 16
+                              ),
+                            ),
+                            color: Color.fromRGBO(245, 245, 245, 1),
+                            textColor: Color.fromRGBO(255, 192, 0, 1),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              side: BorderSide(
+                                color: Color.fromRGBO(255, 192, 0, 1)
+                              )
+                            ),
+                            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Login()))
+                          ),
+                        )
                       )
                     )
                   )
                 ]
-              )
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: TextField(
-                controller: widget.email,
-                style: TextStyle(
-                  fontSize: 18 
-                ),
-                decoration: InputDecoration(
-                  labelText: "Email:",
-                  icon: Icon(Icons.email)
-                ),
-                keyboardType: TextInputType.emailAddress,
-                maxLength: 50,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: TextField(
-                controller: widget.estado,
-                style: TextStyle(
-                  fontSize: 18 
-                ),
-                decoration: InputDecoration(
-                  labelText: "Estado:",
-                  icon: Icon(Icons.location_on)
-                ),
-                keyboardType: TextInputType.text,
-                maxLength: 2,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: TextField(
-                controller: widget.cidade,
-                style: TextStyle(
-                  fontSize: 18
-                ),
-                decoration: InputDecoration(
-                  labelText: "Cidade:",
-                  icon: Icon(Icons.location_city)
-                ),
-                keyboardType: TextInputType.text,
-                maxLength: 30,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: TextField(
-                controller: widget.password,
-                obscureText: true,
-                style: TextStyle(
-                  fontSize: 18 
-                ),
-                decoration: InputDecoration(
-                  labelText: "Senha:",
-                  icon: Icon(Icons.vpn_key),
-                ),
-                keyboardType: TextInputType.visiblePassword,
-                maxLength: 10,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: TextField(
-                controller: widget.password2,
-                obscureText: true,
-                style: TextStyle(
-                  fontSize: 18 
-                ),
-                decoration: InputDecoration(
-                  labelText: "Confirme a Senha:",
-                  icon: Icon(Icons.vpn_key),
-                ),
-                keyboardType: TextInputType.visiblePassword,
-                maxLength: 10,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: RaisedButton(
-                child: Text(
-                  "Cadastrar",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold
-                  )
-                ),
-                color: Colors.green,
-                textColor: Colors.white,
-                padding: EdgeInsets.all(10),
-                highlightColor: Colors.yellow[300],
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      debugPrint('sexo: ' + widget.sexo);
-
-                      if (widget.nome.text == null || widget.nome.text.trim() == "")
-                        return Alerta("Erro", "Preencha o nome.");
-
-                      if (widget.data.text == null || widget.data.text.trim() == "")
-                        return Alerta("Erro", "Preencha a data.");
-
-                      if (widget.sexo == null || widget.sexo == "")
-                        return Alerta("Erro", "Selecione o sexo.");
-
-                      if (widget.email.text == null || widget.email.text.trim() == "")
-                        return Alerta("Erro", "Preencha o e-mail.");
-
-                      if (widget.estado.text == null || widget.estado.text.trim() == "")
-                        return Alerta("Erro", "Preencha o estado.");
-
-                      if (widget.cidade.text == null || widget.cidade.text.trim() == "")
-                        return Alerta("Erro", "Preencha a cidade.");
-
-                      if (widget.password.text == null || widget.password.text.trim() == "")
-                        return Alerta("Erro", "Preencha a senha.");
-
-                      if (widget.password2.text != widget.password.text)
-                        return Alerta("Erro", "Confirmação de senha incorreta!");
-
-                      final user = new User(widget.nome.text, widget.email.text, widget.data.text, widget.sexo, widget.estado.text, widget.cidade.text, widget.password.text);
-
-                      return Login();
-                    }
-                  );
-                },
               ),
             )
-          ]
+          ],
         )
       )
     );

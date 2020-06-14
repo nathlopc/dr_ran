@@ -69,7 +69,14 @@ class Login extends StatelessWidget {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return Home(new User("Nathália Lopes", "nathalialcoimbra@gmail.com", "18/04/1992", "F", "SP", "São Paulo", "12345"));
+                      return Home(new User(
+                        nome: "Nathália Lopes", 
+                        email: "nathalialcoimbra@gmail.com", 
+                        data: "18/04/1992", 
+                        sexo: "Feminino", 
+                        estado: "SP", 
+                        cidade: "São Paulo", 
+                        senha: "12345"));
                       /*if (email.text == null || email.text == '')
                         return Alerta("Erro", "Preencha o campo e-mail.");
 

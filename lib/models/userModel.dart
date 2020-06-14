@@ -8,5 +8,5 @@ class User {
   final String cidade;
   final String senha;
 
-  User(this.nome, this.email, this.data, this.sexo, this.estado, this.cidade, this.senha);
+  User({this.nome, this.email, this.data, this.sexo, this.estado, this.cidade, this.senha});
 }
