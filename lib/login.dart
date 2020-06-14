@@ -1,112 +1,170 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'cadastro.dart';
-import 'util/alerta.dart';
-import 'models/userModel.dart';
+import 'components/footer.dart';
+import 'components/section.dart';
+import 'data/firebase.dart';
 import 'home.dart';
 
 class Login extends StatelessWidget {
 
   Login();
 
-  final nome = TextEditingController();
-  final email = TextEditingController();
-  final password = TextEditingController();
+  String email;
+  String senha;
+  final GlobalKey<FormState> login = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Login"),
+        backgroundColor: Color.fromRGBO(245, 245, 245, 1),
+        elevation: 0,
+        iconTheme: IconThemeData(
+          color: Color.fromRGBO(51, 51, 51, 1)
+        ),
       ),
+      bottomSheet: Footer(),
       body: SingleChildScrollView(
         child: Column (
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: TextField(
-                controller: email,
-                style: TextStyle(
-                  fontSize: 18 
-                ),
-                decoration: InputDecoration(
-                  labelText: "Email:",
-                  icon: Icon(Icons.email)
-                ),
-                keyboardType: TextInputType.emailAddress,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: TextField(
-                controller: password,
-                obscureText: true,
-                style: TextStyle(
-                  fontSize: 18 
-                ),
-                decoration: InputDecoration(
-                  labelText: "Senha:",
-                  icon: Icon(Icons.vpn_key),
-                ),
-                keyboardType: TextInputType.visiblePassword,
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(20),
-              child: RaisedButton(
-                child: Text(
-                  "Entrar",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold
-                  )
-                ),
-                color: Colors.green,
-                textColor: Colors.white,
-                padding: EdgeInsets.all(10),
-                highlightColor: Colors.yellow[300],
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Home(new User(
-                        nome: "Nathália Lopes", 
-                        email: "nathalialcoimbra@gmail.com", 
-                        data: "18/04/1992", 
-                        sexo: "Feminino", 
-                        estado: "SP", 
-                        cidade: "São Paulo", 
-                        senha: "12345"));
-                      /*if (email.text == null || email.text == '')
-                        return Alerta("Erro", "Preencha o campo e-mail.");
-
-                      if (password.text == null || password.text == '')
-                        return Alerta("Erro", "Preencha o campo senha");
-
-                      if (_user == null || email.text != _user.email || password.text != _user.senha)
-                        return Alerta("Erro", "Login e/ou senha incorretos!");
-
-                      return Home(_user);*/
-                    }
-                  );
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 10),
-              child: InkWell(
-                child: Text(
-                  "Cadastre-se",
-                  style: TextStyle(
-                    color: Colors.blue
+            Stack (
+              children: <Widget>[
+                Positioned (
+                  width: MediaQuery.of(context).size.width,
+                  top: 10,
+                  left: 30,
+                  child: Text(
+                    "dr. ran",
+                    style: TextStyle(
+                      fontFamily: "BradleyHandITC",
+                      fontSize: 50
+                    ),
                   ),
                 ),
-                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Cadastro()))
-              ),
+                Padding (
+                  padding: EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 20),
+                  child: Image(
+                    image: AssetImage('assets/images/frog2.png'),
+                  ),
+                )
+              ],
+            ),
+            Padding (
+              padding: EdgeInsets.all(15),
+              child: Column (
+                children: <Widget> [
+                  Section("Login"),
+                  Form(
+                    key: login,
+                    child: Column(
+                      children: <Widget>[
+                        Padding (
+                          padding: EdgeInsets.only(top: 10, bottom: 10),
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: "E-mail"
+                            ),
+                            onSaved: (field) => email = field,
+                            validator: (email) => email.isEmpty || email.trim().length == 0 ? 'Campo obrigatório' : null,
+                          ),
+                        ),
+                        Padding (
+                          padding: EdgeInsets.only(top: 10, bottom: 10),
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: "Senha"
+                            ),
+                            obscureText: true,
+                            onSaved: (field) => senha = field,
+                            validator: (senha) {
+                              if (senha.isEmpty || senha.trim().length == 0)
+                                return "Campo obrigatório";
+
+                              if (senha.length < 6)
+                                return "Senha deve ter no mínimo 6 caracteres";
+
+                              return null;
+                            }
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.topCenter,
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 50, bottom: 15),
+                            child: SizedBox (
+                              width: MediaQuery.of(context).size.width,
+                              child: RaisedButton(
+                                padding: EdgeInsets.all(15),
+                                child: Text(
+                                  "Entrar",
+                                  style: TextStyle(
+                                    fontSize: 16
+                                  ),
+                                ),
+                                color: Color.fromRGBO(245, 245, 245, 1),
+                                textColor: Color.fromRGBO(112, 173, 71, 1),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  side: BorderSide(
+                                    color: Color.fromRGBO(112, 173, 71, 1)
+                                  )
+                                ),
+                                onPressed: () async {
+                                  if (login.currentState.validate()) {
+                                    login.currentState.save();
+                                    
+                                    var user = await FirebaseAPI().login(email, senha);
+                                    
+                                    if (user != null)
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => Home(user)));
+                                  }
+                                },
+                              ),
+                            )
+                          )
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 40),
+                          child: Align(
+                            alignment: Alignment.topCenter,
+                            child: Padding(
+                              padding: EdgeInsets.only(top: 15, bottom: 15),
+                              child: SizedBox (
+                                width: MediaQuery.of(context).size.width,
+                                child: RaisedButton(
+                                  padding: EdgeInsets.all(15),
+                                  child: Text(
+                                    "Cadastre-se",
+                                    style: TextStyle(
+                                      fontSize: 16
+                                    ),
+                                  ),
+                                  color: Color.fromRGBO(245, 245, 245, 1),
+                                  textColor: Color.fromRGBO(255, 192, 0, 1),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    side: BorderSide(
+                                      color: Color.fromRGBO(255, 192, 0, 1)
+                                    )
+                                  ),
+                                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Cadastro()))
+                                ),
+                              )
+                            )
+                          )
+                        )
+                      ]
+                    ),
+                  )                  
+                ]
+              )
             ),
           ],
-        ),
-      ),
+        )
+      )
     );
   }
 }

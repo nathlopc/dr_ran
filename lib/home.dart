@@ -7,6 +7,7 @@ import 'models/userModel.dart';
 import 'hospitais.dart';
 import 'cards/news.dart';
 import 'models/newsModel.dart';
+import 'data/firebase.dart';
 
 class Home extends StatelessWidget {
 
@@ -183,7 +184,11 @@ class Home extends StatelessWidget {
             new Divider(),
             new ListTile(
               title: Text("Sair"),
-              onTap: () => Navigator.push(context, new MaterialPageRoute(builder: (context) => Main()))
+              onTap: () async { 
+                await FirebaseAPI().logout();
+
+                Navigator.push(context, new MaterialPageRoute(builder: (context) => Main()));
+              }
             )
           ]
         )

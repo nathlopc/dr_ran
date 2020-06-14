@@ -9,7 +9,7 @@ class FirebaseAPI {
   final auth = FirebaseAuth.instance;
 
   Future<List<HospitalModel>> getHospitais() async {
-    var snapshots = await database.collection("hospitais").snapshots();
+    var snapshots = database.collection("hospitais").snapshots();
     var hospitais = new List<HospitalModel>();
     
     snapshots.map<QuerySnapshot>((snapshot) {
@@ -59,4 +59,31 @@ class FirebaseAPI {
     }
   }
 
+  Future<User> login(String email, String senha) async {
+    var result = await auth.signInWithEmailAndPassword(email: email, password: senha);
+    User _loggedUser;
+
+    if (result.user != null)
+    {
+      var _result = await database.collection("usuarios").document(result.user.uid).get();
+      
+      if (_result.data != null)
+      {
+        _loggedUser = new User(
+          cidade: _result.data["cidade"],
+          email: email,
+          data: _result.data["data"],
+          estado: _result.data["estado"],
+          nome: _result.data["nome"],
+          sexo: _result.data["sexo"]
+        );
+      }
+    }
+
+    return _loggedUser;
+  }
+
+  Future<bool> logout() async {
+    await auth.signOut();
+  }
 }
