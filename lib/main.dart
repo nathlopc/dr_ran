@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'login.dart';
+import 'principal.dart';
 
 void main() => runApp(Main());
 
@@ -9,7 +9,7 @@ class Main extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Dr. RAN',
-      home: Login(null),
+      home: Principal(),
     );
   }
 }

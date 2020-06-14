@@ -255,7 +255,7 @@ class Formulario extends State<Cadastro> {
 
                       final user = new User(widget.nome.text, widget.email.text, widget.data.text, widget.sexo, widget.estado.text, widget.cidade.text, widget.password.text);
 
-                      return Login(user);
+                      return Login();
                     }
                   );
                 },

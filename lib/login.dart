@@ -7,8 +7,7 @@ import 'home.dart';
 
 class Login extends StatelessWidget {
 
-  final User _user;
-  Login(this._user);
+  Login();
 
   final nome = TextEditingController();
   final email = TextEditingController();
