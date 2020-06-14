@@ -7,6 +7,7 @@ import 'data/newsapi.dart';
 import 'home.dart';
 import 'models/userModel.dart';
 import 'components/section.dart';
+import 'components/banner.dart';
 
 class News extends StatelessWidget {
 
@@ -23,45 +24,7 @@ class News extends StatelessWidget {
           if (snapshot.hasData) {
             return Column(
               children: <Widget> [
-                GestureDetector(
-                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Home(_user))),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                        colors: [Color.fromRGBO(241, 90, 36, 1), Color.fromRGBO(175, 18, 82, 1)]
-                      ),
-                    ),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          flex: 2,
-                          child: Center(
-                            child: Text(
-                              "Guia",
-                              style: TextStyle(
-                                fontFamily: "BradleyHandITC",
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontSize: 30
-                              ),
-                            ),
-                          )
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Padding(
-                            padding: EdgeInsets.all(15),
-                            child: Image(image: AssetImage('assets/images/guide.png'))
-                          )
-                        )
-                      ]
-                    ),
-                  )
-                ),
+                LinkBanner("Guia", "assets/images/guide.png", Color.fromRGBO(241, 90, 36, 1), Color.fromRGBO(175, 18, 82, 1), Home(_user)),
                 Section("Últimas Notícias"),
                 Expanded(
                   child: ListView.builder(

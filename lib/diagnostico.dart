@@ -2,32 +2,81 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'home.dart';
 import 'models/userModel.dart';
+import 'package:flutter_circular_chart/flutter_circular_chart.dart';
 import 'hospitais.dart';
-import 'components/menuBar.dart';
+import 'components/banner.dart';
+import 'components/section.dart';
+import 'news.dart';
 
 class Diagnostico extends StatefulWidget {
 
   final User _user;
-  final double percentage;
-  Diagnostico(this._user, this.percentage);
+  final double _percentage;
+  final GlobalKey<AnimatedCircularChartState> _chart = new GlobalKey<AnimatedCircularChartState>();
+  final List<CircularStackEntry> _data = new List();
+  Color _color;
+  String _title = "Erro";
+  String _text = "Erro ao realizar diagnóstico";
+  String _banner = "Guia";
+  Color _color1;
+  Color _color2;
+  String _image;
+  Widget _redirect;
 
-  bool _option1 = false;
-  bool _option2 = false;
-  bool _option3 = false;
+  void main() {
+    _data.add(
+      new CircularStackEntry(
+        <CircularSegmentEntry>[
+          new CircularSegmentEntry(_percentage, _color)
+        ],
+        rankKey: 'Diagnóstico'
+      )
+    );
+  }
   
+  Diagnostico(this._user, this._percentage);
+
   @override
   State<StatefulWidget> createState() {
     setVisibility();
+    main();
     return Orientacao();
   }
 
   void setVisibility() {
-    if (percentage <= 25)
-      _option1 = true;
-    else if (percentage > 25 && percentage <= 52.5)
-      _option2 = true;
+    if (_percentage <= 25)
+    {
+      _color = Color.fromRGBO(68, 114, 196, 1);
+      _title = "Fique tranquilo(a)!";
+      _text = "Pelos seus sintomas, provavelmente seu problema não passa de uma gripe comum.\n\nVerifique nos próximos dias o aparecimento de novos sintomas e/ou o agravamento dos sintomas que você já possui e refaça o teste.\n\nPreserve-se e fique em casa!";
+      _banner = "Notícias";
+      _image = "assets/images/news.png";
+      _redirect = News(_user);
+      _color1 = Color.fromRGBO(210, 147, 36, 1);
+      _color2 = Color.fromRGBO(0, 166, 144, 1);
+    }
+    else if (_percentage > 25 && _percentage <= 52.5)
+    {
+      _color = Color.fromRGBO(255, 192, 0, 1);
+      _title = "Fique atento(a)!";
+      _text = "No momento seus sintomas são leves e podem ser tratados em casa. É importante, no entanto, que você fique isolado pelos próximos 15 dias e mantenha as regras de higiene.\n\n\Fique atento ao surgimento de novos sintomas e/ou o agravamento dos que você já possui. Refaça o teste caso isso ocorra.";
+      _banner = "Guia";
+      _image = "assets/images/guide.png";
+      _redirect = Home(_user);
+      _color1 = Color.fromRGBO(241, 90, 36, 1);
+      _color2 = Color.fromRGBO(175, 18, 82, 1);
+    }
     else
-      _option3 = true;
+    {
+      _color = Colors.red;
+      _title = "Fique calmo(a)!";
+      _text = "Mantenha a calma e procure o hospital mais próximo de você para obter um diagnóstico mais apurado.\n\nLembre-se de lavar bem as mãos com água e sabão antes de sair, colocar corretamente a máscara e manter uma distância mínima de 1.5 metros das pessoas, para evitar contágio.";
+      _banner = "Hospitais";
+      _image = "assets/images/hospital.png";
+      _redirect = Hospitais();
+      _color1 = Color.fromRGBO(156, 114, 73, 1);
+      _color2 = Colors.red;
+    }
   }
 }
 
@@ -57,233 +106,84 @@ class Orientacao extends State<Diagnostico> {
           ),
         ],
       ),
-      body: Column(
-        children: <Widget>[
-          Visibility(
-            visible: widget._option1,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 10),
-              child: Column(
-                children: <Widget>[
-                  Center(
-                    child: Container(
-                      width: 200,
-                      height: 200,
-                      margin: EdgeInsets.only(top: 40, bottom: 40),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topRight,
-                          end: Alignment.bottomLeft,
-                          colors: [Colors.green, Colors.green[100]]
-                        ),
-                        borderRadius: BorderRadius.circular(200)
-                      ),
-                      child: Center(
-                        child: Text(
-                          widget.percentage.toString() + "%",
-                          style: TextStyle(
-                            fontSize: 48.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            shadows: [BoxShadow(
-                              color: Colors.green,
-                              blurRadius: 4.0,
-                              spreadRadius: 1.0,
-                              offset: Offset(0,0),
-                            )]
-                          ),
+      bottomSheet: LinkBanner(widget._banner, widget._image, widget._color1, widget._color2, widget._redirect),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.all(15),
+              child: Section("Diagnóstico")
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 15, right: 15),
+              child: Card(
+                child: Column(
+                  children: <Widget>[
+                    Center(
+                      child: AnimatedCircularChart(
+                        key: widget._chart,
+                        size: Size(200.0, 200.0),
+                        initialChartData: widget._data,
+                        chartType: CircularChartType.Radial,
+                        edgeStyle: SegmentEdgeStyle.round,
+                        percentageValues: true,
+                        holeLabel: widget._percentage.toString() + '%',
+                        labelStyle: TextStyle(  
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: widget._color
                         ),
                       )
-                    )
-                  ),
-                  Center(
-                    child: Text(
-                      "Fique tranquilo!",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold
+                    ),
+                    Center(
+                      child: Text(
+                        widget._title,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: widget._color
+                        ),
                       ),
                     ),
-                  ),
-                  Padding (
-                    padding: EdgeInsets.only(top: 40, bottom: 40),
-                    child: Center(
-                      child: Text(
-                        "Pelos seus sintomas, provavelmente seu problema não passa de uma gripe comum.\n\nVerifique nos próximos dias o aparecimento de novos sintomas ou o agravamento dos que você já possui e refaça o teste.\n\nMesmo não se tratando de Covid-19, seu sistema imunológico está mais fraco.\n\nPreserve-se! Fique em casa!",
-                        style: TextStyle(
-                          fontSize: 14,
-                        ),
-                        textAlign: TextAlign.justify,
-                      ),
-                    )
-                  )
-                ],
-              )
-            )
-          ),
-          Visibility(
-            visible: widget._option2,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 10),
-              child: Column(
-                children: <Widget>[
-                  Center(
-                    child: Container(
-                      width: 200,
-                      height: 200,
-                      margin: EdgeInsets.only(top: 40, bottom: 40),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topRight,
-                          end: Alignment.bottomLeft,
-                          colors: [Colors.orange, Colors.orange[100]]
-                        ),
-                        borderRadius: BorderRadius.circular(200)
-                      ),
-                      child: Center(
-                        child: Text(
-                          widget.percentage.toString() + "%",
-                          style: TextStyle(
-                            fontSize: 48.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            shadows: [BoxShadow(
-                              color: Colors.orange,
-                              blurRadius: 4.0,
-                              spreadRadius: 1.0,
-                              offset: Offset(0,0),
-                            )]
-                          ),
-                        ),
-                      )
-                    )
-                  ),
-                  Center(
-                    child: Text(
-                      "Fique atento(a)!",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold
-                      ),
-                    ),
-                  ),
-                  Padding (
-                    padding: EdgeInsets.only(top: 40, bottom: 40),
-                    child: Center(
-                      child: Text(
-                        "Pelos seus sintomas, existe alguma chance de você ter contraído Covid-19, mas seus sintomas são leves e podem ser tratados de casa.\n\nFique atento à sua condição de saúde, principalmente nos próximos 14 dias e volte a fazer o teste caso haja agravamento ou aparecimento de sintomas.\n\nAtenção redobrada à sua higiene e fique em casa!\n\nLembre-se de lavar as mãos com água e sabão (ou álcool em gel 70%), use máscara o tempo todo, mantenha uma distância mínima de 2 metros para as outras pessoas, não compartilhe objetos pessoais (talheres, copo, toalha de banho, roupa de cama).\n\nPreserve sua a saúde e das outras pessoas!",
-                        style: TextStyle(
-                          fontSize: 14,
-                        ),
-                        textAlign: TextAlign.justify,
-                      ),
-                    )
-                  )
-                ],
-              )
-            )
-          ),
-          Visibility(
-            visible: widget._option3,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 10),
-              child: Column(
-                children: <Widget>[
-                  Center(
-                    child: Container(
-                      width: 200,
-                      height: 200,
-                      margin: EdgeInsets.only(top: 40, bottom: 40),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topRight,
-                          end: Alignment.bottomLeft,
-                          colors: [Colors.red, Colors.red[100]]
-                        ),
-                        borderRadius: BorderRadius.circular(200)
-                      ),
-                      child: Center(
-                        child: Text(
-                          widget.percentage.toString() + "%",
-                          style: TextStyle(
-                            fontSize: 48.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            shadows: [BoxShadow(
-                              color: Colors.red,
-                              blurRadius: 4.0,
-                              spreadRadius: 1.0,
-                              offset: Offset(0,0),
-                            )]
-                          ),
-                        ),
-                      )
-                    )
-                  ),
-                  Center(
-                    child: Text(
-                      "Mantenha a calma!",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold
-                      ),
-                    ),
-                  ),
-                  Padding (
-                    padding: EdgeInsets.only(top: 40, bottom: 40),
-                    child: Center(
-                      child: Text(
-                        "Pelos seus sintomas, há chances altas de vocês ter contraído Covid-19.\n\nProcure o hospital mais próximo de você para um diagnóstico mais apurado.\n\nLembre-se de lavar bem as mãos com água e sabão antes de sair, colocar uma máscara no rosto e manter uma distância mínima de 1m para as outras pessoas para evitar contágio.\n\nConfira uma lista de hospitais para procurar ajuda médica:",
-                        style: TextStyle(
-                          fontSize: 14,
-                        ),
-                        textAlign: TextAlign.justify,
-                      ),
-                    )
-                  ),
-                 /* Padding (
-                    padding: EdgeInsets.all(0),
-                    child: Container(
-                      width: 500,
-                      height: 70,
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Color.fromRGBO(85,153,255,1),
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                        boxShadow: [BoxShadow(
-                          color: Color.fromRGBO(85,153,255,0.5),
-                          blurRadius: 4.0,
-                          spreadRadius: 2.0,
-                          offset: Offset(0,0),
-                        )]
-                      ),
-                      child: InkWell (
-                        onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => Hospitais()));
-                        },
-                        child: ListTile(
-                          leading: Image(
-                            image: NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR3QU9I70aLyrjoElpJS0OsG3l8FiMO4AwjpAlQRI0HCTWK95ui&usqp=CAU'),
-                          ),
-                          title: Text(
-                            "Encontre um hospital",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 15, bottom: 15),
+                            child: Container(
+                              height: 180,
+                              width: 20,
+                              color: widget._color
                             ),
-                            textAlign: TextAlign.center,
-                          ),
+                          )
                         ),
-                      )
-                    ),
-                  )*/
-                ],
-              )
+                        Expanded(
+                          flex: 14,
+                          child: Padding (
+                            padding: EdgeInsets.only(top: 25, left: 15, bottom: 15, right: 15),
+                            child: Center(
+                              child: Text(
+                                widget._text,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontFamily: "BradleyHandITC"
+                                ),
+                                textAlign: TextAlign.justify,
+                              ),
+                            )
+                          ),
+                        )
+                      ],
+                    )
+                    
+                  ],
+                ),
+              ),
             )
-          ),
-        ],
-      ),
+          ]
+        )
+      )
     );
   }
 }

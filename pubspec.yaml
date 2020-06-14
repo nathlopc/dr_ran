@@ -29,6 +29,7 @@ dependencies:
   maps_launcher: ^1.2.0
   url_launcher: ^5.4.10
   webview_flutter: ^0.3.22+1
+  flutter_circular_chart: ^0.1.0
 
   mask_text_input_formatter: ^1.0.6
   string_mask: ^0.1.0
@@ -53,6 +54,8 @@ flutter:
     - assets/images/frog3.png
     - assets/images/frog4.png
     - assets/images/guide.png
+    - assets/images/hospital.png
+    - assets/images/news.png
   fonts:
     - family: BradleyHandITC
       fonts:
