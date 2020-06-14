@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'home.dart';
 import 'models/userModel.dart';
 import 'hospitais.dart';
+import 'components/menuBar.dart';
 
 class Diagnostico extends StatefulWidget {
 
   final User _user;
-  final int percentage;
+  final double percentage;
   Diagnostico(this._user, this.percentage);
 
   bool _option1 = false;
@@ -21,9 +22,9 @@ class Diagnostico extends StatefulWidget {
   }
 
   void setVisibility() {
-    if (percentage < 33)
+    if (percentage <= 25)
       _option1 = true;
-    else if (percentage < 66)
+    else if (percentage > 25 && percentage <= 52.5)
       _option2 = true;
     else
       _option3 = true;
@@ -36,7 +37,18 @@ class Orientacao extends State<Diagnostico> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Diagnóstico"),
+        title: Center(
+          child: Text(
+            "dr. ran",
+            style: TextStyle(
+              fontFamily: 'BradleyHandITC',
+              fontStyle: FontStyle.italic,
+              fontWeight: FontWeight.bold,
+              fontSize: 24
+            ),
+          )
+        ),
+        backgroundColor: Color.fromRGBO(51, 51, 51, 1),
         automaticallyImplyLeading: false,
         actions: <Widget>[
           IconButton(
