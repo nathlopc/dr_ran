@@ -8,6 +8,14 @@ import 'hospitais.dart';
 import 'cards/news.dart';
 import 'models/newsModel.dart';
 import 'data/firebase.dart';
+import 'components/section.dart';
+import 'cards/covid.dart';
+import 'models/covidModel.dart';
+import 'data/covidAPI.dart';
+import 'dart:convert';
+import 'data/newsapi.dart';
+import 'components/menuBar.dart';
+import 'guide.dart';
 
 class Home extends StatelessWidget {
 
@@ -17,11 +25,10 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold (
-      appBar: AppBar(
-        title: Text("Home"),
-      ),
+      appBar: MenuBar(appBar: AppBar()),
       body: SingleChildScrollView(
         child: Column (
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Center(
               child: Container (
@@ -37,114 +44,240 @@ class Home extends StatelessWidget {
               )
             ),
             Padding(
-              padding: EdgeInsets.all(0),
+              padding: EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
+              child: Section("Coronavírus no Brasil")
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 15, right: 15, bottom: 15),
               child: Column(
                 children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => Consulta(_user)));
-                        },
-                        child: Container (
-                          margin: EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 20),
-                          padding: EdgeInsets.all(20),
-                          width: 180,
-                          height: 240,
-                          decoration: BoxDecoration(
-                            color: Color.fromRGBO(242,156,33,1),
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                            boxShadow: [BoxShadow(
-                              color: Color.fromRGBO(242,156,33,0.5),
-                              blurRadius: 4.0,
-                              spreadRadius: 2.0,
-                              offset: Offset(0,0),
-                            )]
-                          ),
-                          child: Column(
-                            children: <Widget>[
-                              Image(
-                                image: NetworkImage('http://marcelotoledo.com/wp-content/uploads/2016/04/teste-ab-checklist-1680x1680.jpg'),
-                              ),
-                              Text(
-                                "Teste de\nCovid-19",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white
-                                ),
-                                textAlign: TextAlign.center,
+                  FutureBuilder<List<Covid>>(
+                    future: CovidAPI().getCovidData(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            CovidCard(snapshot.data[0], Color.fromRGBO(251, 174, 23, 1), "Casos Confirmados", "Total", "Novos"),
+                            CovidCard(snapshot.data[1], Color.fromRGBO(127, 71, 221, 1), "Óbitos\n", "Total", "Novos"),
+                            CovidCard(snapshot.data[2], Color.fromRGBO(136, 168, 13, 1), "Casos Tratados\n", "Total", "Recuperados")
+                          ],
+                        );
+                      }
+                      
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Expanded(
+                            child: Card(
+                              color: Colors.white,
+                              child: Padding(
+                                padding: EdgeInsets.all(30),
+                                child: snapshot.hasError 
+                                  ? Text(
+                                    "Não há dados sobre Covid-19",
+                                    style: TextStyle(
+                                      color: Colors.black38,
+                                      fontSize: 18
+                                    )
+                                  ) 
+                                  : Center(
+                                    child: CircularProgressIndicator()
+                                  )
                               )
-                            ]
+                            )
                           )
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => Hospitais()));
-                        },
-                        child: Container (
-                          margin: EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 20),
-                          padding: EdgeInsets.all(20),
-                          width: 180,
-                          height: 240,
-                          decoration: BoxDecoration(
-                            color: Color.fromRGBO(85,153,255,1),
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                            boxShadow: [BoxShadow(
-                              color: Color.fromRGBO(85,153,255,0.5),
-                              blurRadius: 4.0,
-                              spreadRadius: 2.0,
-                              offset: Offset(0,0),
-                            )]
-                          ),
-                          child: Column(
-                            children: <Widget>[
-                              Image(
-                                image: NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR3QU9I70aLyrjoElpJS0OsG3l8FiMO4AwjpAlQRI0HCTWK95ui&usqp=CAU'),
-                              ),
-                              Text(
-                                "Encontre\num hospital",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white
-                                ),
-                                textAlign: TextAlign.center,
-                              )
-                            ],
-                          )
-                        )
-                      )
-                    ],
+                        ]
+                      );
+                    },
                   )
                 ],
               ),
             ),
-            NewsItem(new NewsModel(
-              title: "Coronavírus: Teich diz que governo vai distribuir 272 respiradores a estados", 
-              subtitle: "Ministro da Saúde também falou que enviará mais um milhão de testes rápidos", 
-              image: "https://ogimg.infoglobo.com.br/in/24384696-ab4-39b/FT1086A/652/xrespiradores.jpg.pagespeed.ic.gK2GBcj89d.jpg", 
-              link: null,
-              place: "Globo"), _user),
             Padding(
-              padding: EdgeInsets.all(20),
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => News(_user)));
-                },
-                child: Text(
-                  "Veja mais notícias", 
-                  style: TextStyle(
-                    color: Colors.lightBlue,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500
+              padding: EdgeInsets.only(left: 15, right: 15),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Stack(
+                      children: <Widget> [
+                        Padding(
+                          padding: EdgeInsets.only(top: 50, bottom: 15, right: 7.5),
+                          child: InkWell(
+                            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Consulta(_user))),
+                            child: Container(
+                            height: 100,
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [Color.fromRGBO(255, 192, 0, 1), Color.fromRGBO(128, 72, 219, 1)]
+                              )
+                            ),
+                            child: Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Padding(
+                                padding: EdgeInsets.only(top: 15, bottom: 15),
+                                child: Text(
+                                  "Teste Covid-19",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600
+                                  ),
+                                ),
+                              )
+                            ),
+                          ),
+                          )
+                        ),
+                        Align(
+                          alignment: Alignment.topCenter,
+                          child: InkWell(
+                            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Consulta(_user))),
+                            child: Positioned(
+                              child: Container(
+                                height: 100,
+                                width: 100,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.white
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.all(5),
+                                  child: Image(
+                                    image: AssetImage("assets/images/test.png")
+                                  ),
+                                )
+                              ),
+                            ),
+                          )
+                        )
+                      ]
+                    )
                   ),
-                  textAlign: TextAlign.left,
-                ),
+                  Expanded(
+                    child: Stack(
+                      children: <Widget> [
+                        Padding(
+                          padding: EdgeInsets.only(top: 50, bottom: 15, right: 7.5),
+                          child: InkWell(
+                            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Guide())),
+                            child: Container(
+                              height: 100,
+                              width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [Color.fromRGBO(241, 90, 36, 1), Color.fromRGBO(159, 1, 93, 1)]
+                                )
+                              ),
+                              child: Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Padding(
+                                  padding: EdgeInsets.only(top: 15, bottom: 15),
+                                  child: Text(
+                                    "Guia",
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600
+                                    ),
+                                  ),
+                                )
+                              ),
+                            ),
+                          )
+                        ),
+                        Align(
+                          alignment: Alignment.topCenter,
+                          child: Positioned(
+                            child: InkWell(
+                              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Guide())),
+                              child: Container(
+                                height: 100,
+                                width: 100,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.white
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.all(15),
+                                  child: Image(
+                                    image: AssetImage("assets/images/guide_color.png")
+                                  ),
+                                )
+                              ),
+                            ),
+                          )
+                        )
+                      ]
+                    )
+                  )
+                ]
               ),
-            )
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 15, right: 15),
+              child: Section("Últimas Notícias")
+            ),
+            SizedBox(
+              height: 600,
+              child: FutureBuilder<List<NewsModel>>(
+                future: NewsAPI().getNews(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Column(
+                      children: <Widget> [
+                        Expanded(
+                          child: ListView.builder(
+                            physics: ClampingScrollPhysics(),
+                            scrollDirection: Axis.horizontal,
+                            shrinkWrap: true,
+                            itemCount: 6,
+                            itemBuilder: (context, index) {
+                              return (index == 5)
+                              ? Align(
+                                alignment: Alignment.center, 
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 15, right: 30),
+                                  child: ClipOval(
+                                    child: Material(
+                                      color: Color.fromRGBO(112, 173, 71, 1),
+                                      child: InkWell(
+                                        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => News(_user))),
+                                        child: SizedBox(
+                                          width: 50, 
+                                          height: 50, 
+                                          child: Icon(
+                                            Icons.add,
+                                            color: Colors.white
+                                          )
+                                        ),
+                                      ),
+                                    )
+                                  ),
+                                ),
+                              )
+                              : NewsItem(snapshot.data[index], _user);
+                            }
+                          )
+                        )
+                      ]
+                    );
+                  }
+                  else if (snapshot.hasError)
+                    return Center(
+                      child: Text(
+                        "Não há notícias",
+                        style: TextStyle(
+                          color: Colors.black38,
+                          fontSize: 18
+                        )
+                      )
+                    );
+                  return Center(child: CircularProgressIndicator());
+                }
+              )
+            ),
           ]
         )
       ),
@@ -155,8 +288,11 @@ class Home extends StatelessWidget {
               accountName: Text(_user.nome), 
               accountEmail: Text(_user.email),
               currentAccountPicture: new CircleAvatar(
-                backgroundImage: new NetworkImage('https://img.freepik.com/free-vector/businessman-profile-cartoon_18591-58479.jpg?size=338&ext=jpg'),
+                backgroundImage: AssetImage("assets/images/profile.jpg"),
               ),
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(51, 51, 51, 1)
+              )
             ),
             new ListTile(
               title: Text("Notícias"),
@@ -175,6 +311,13 @@ class Home extends StatelessWidget {
               },
             ),
             new ListTile(
+              title: Text("Guia"),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) => Guide()));
+              },
+            ),
+            new ListTile(
               title: Text("Hospitais"),
               onTap: () {
                 Navigator.of(context).pop();
@@ -182,6 +325,14 @@ class Home extends StatelessWidget {
               },
             ),
             new Divider(),
+            /*new ListTile(
+              title: Text("Profile"),
+              onTap: () async { 
+                await FirebaseAPI().logout();
+
+                Navigator.push(context, new MaterialPageRoute(builder: (context) => Main()));
+              }
+            ),*/
             new ListTile(
               title: Text("Sair"),
               onTap: () async { 

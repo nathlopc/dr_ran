@@ -8,6 +8,7 @@ import 'home.dart';
 import 'models/userModel.dart';
 import 'components/section.dart';
 import 'components/banner.dart';
+import 'guide.dart';
 
 class News extends StatelessWidget {
 
@@ -24,7 +25,7 @@ class News extends StatelessWidget {
           if (snapshot.hasData) {
             return Column(
               children: <Widget> [
-                LinkBanner("Guia", "assets/images/guide.png", Color.fromRGBO(241, 90, 36, 1), Color.fromRGBO(175, 18, 82, 1), Home(_user)),
+                LinkBanner("Guia", "assets/images/guide.png", Color.fromRGBO(241, 90, 36, 1), Color.fromRGBO(175, 18, 82, 1), Guide()),
                 Section("Últimas Notícias"),
                 Expanded(
                   child: ListView.builder(

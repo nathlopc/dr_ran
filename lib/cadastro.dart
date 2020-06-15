@@ -257,9 +257,9 @@ class Formulario extends State<Cadastro> {
                   Align(
                     alignment: Alignment.topCenter,
                     child: Padding(
-                      padding: EdgeInsets.only(top: 15, bottom: 15),
+                      padding: EdgeInsets.only(left: 15, right: 15, bottom: 10, top: 30),
                       child: SizedBox (
-                        width: MediaQuery.of(context).size.width - 80,
+                        width: MediaQuery.of(context).size.width,
                         child: RaisedButton(
                           padding: EdgeInsets.all(15),
                           child: Text(
@@ -294,13 +294,13 @@ class Formulario extends State<Cadastro> {
                     )
                   ),
                   Padding(
-                    padding: EdgeInsets.only(bottom: 40),
+                    padding: EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 50),
                     child: Align(
                       alignment: Alignment.topCenter,
                       child: Padding(
                         padding: EdgeInsets.only(top: 15, bottom: 15),
                         child: SizedBox (
-                          width: MediaQuery.of(context).size.width - 80,
+                          width: MediaQuery.of(context).size.width,
                           child: RaisedButton(
                             padding: EdgeInsets.all(15),
                             child: Text(

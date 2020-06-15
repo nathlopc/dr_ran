@@ -14,7 +14,7 @@ class NewsItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(left: 15, right: 15, top: 7.5, bottom: 7.5),
-      child: Card(
+      child: Container(width: MediaQuery.of(context).size.width, child: Card(
         child: new InkWell(
           onTap: () { 
             Navigator.push(context, MaterialPageRoute(builder: (context) => NewsDetail(_news.link, _user)));
@@ -64,7 +64,7 @@ class NewsItem extends StatelessWidget {
             ],
           ),
         )
-      )
+      ))
     );
   }
 }
