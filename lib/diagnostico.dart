@@ -7,6 +7,7 @@ import 'hospitais.dart';
 import 'components/banner.dart';
 import 'components/section.dart';
 import 'news.dart';
+import 'guide.dart';
 
 class Diagnostico extends StatefulWidget {
 
@@ -62,7 +63,7 @@ class Diagnostico extends StatefulWidget {
       _text = "No momento seus sintomas são leves e podem ser tratados em casa. É importante, no entanto, que você fique isolado pelos próximos 15 dias e mantenha as regras de higiene.\n\n\Fique atento ao surgimento de novos sintomas e/ou o agravamento dos que você já possui. Refaça o teste caso isso ocorra.";
       _banner = "Guia";
       _image = "assets/images/guide.png";
-      _redirect = Home(_user);
+      _redirect = Guide(_user);
       _color1 = Color.fromRGBO(241, 90, 36, 1);
       _color2 = Color.fromRGBO(175, 18, 82, 1);
     }

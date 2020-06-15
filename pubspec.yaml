@@ -60,7 +60,7 @@ flutter:
     - assets/images/test.png
     - assets/images/profile.jpg
     - assets/images/higienizar_alcool.jpg
-    - assets/images/lavar_sabao.jpg
+    - assets/images/lavar_sabao.png
   fonts:
     - family: BradleyHandITC
       fonts:

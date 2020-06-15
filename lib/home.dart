@@ -161,7 +161,7 @@ class Home extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.only(top: 50, bottom: 15, right: 7.5),
                           child: InkWell(
-                            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Guide())),
+                            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Guide(_user))),
                             child: Container(
                               height: 100,
                               width: MediaQuery.of(context).size.width,
@@ -191,7 +191,7 @@ class Home extends StatelessWidget {
                           alignment: Alignment.topCenter,
                           child: Positioned(
                             child: InkWell(
-                              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Guide())),
+                              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Guide(_user))),
                               child: Container(
                                 height: 100,
                                 width: 100,
@@ -314,7 +314,7 @@ class Home extends StatelessWidget {
               title: Text("Guia"),
               onTap: () {
                 Navigator.of(context).pop();
-                Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) => Guide()));
+                Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) => Guide(_user)));
               },
             ),
             new ListTile(
