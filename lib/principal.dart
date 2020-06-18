@@ -45,7 +45,7 @@ class Page extends State<Principal> {
             bottom: 0,
             child: Container (
               color: Color.fromRGBO(51, 51, 51, 1),
-              height: 418,
+              height: 370,
               width: MediaQuery.of(context).size.width,
               child: Padding (
                 padding: EdgeInsets.only(top: 120, bottom: 30),

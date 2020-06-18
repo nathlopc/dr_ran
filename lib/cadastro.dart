@@ -319,7 +319,7 @@ class Formulario extends State<Cadastro> {
                                         "OK",
                                         style: TextStyle(color: Colors.white, fontSize: 20),
                                       ),
-                                      onPressed: () => Navigator.pop(context),
+                                      onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
                                       width: 120,
                                     )
                                   ]
