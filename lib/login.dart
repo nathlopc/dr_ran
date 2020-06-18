@@ -5,6 +5,7 @@ import 'components/footer.dart';
 import 'components/section.dart';
 import 'data/firebase.dart';
 import 'home.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class Login extends StatelessWidget {
 
@@ -116,10 +117,28 @@ class Login extends StatelessWidget {
                                   if (login.currentState.validate()) {
                                     login.currentState.save();
                                     
-                                    var user = await FirebaseAPI().login(email, senha);
-                                    
-                                    if (user != null)
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => Home(user)));
+                                    await FirebaseAPI().login(email, senha).then((value) {
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => Home(value)));
+                                    })
+                                    .catchError((erro) {
+                                      Alert(
+                                        context: context, 
+                                        title: "Erro", 
+                                        desc: erro.toString(),
+                                        type: AlertType.error,
+                                        buttons: [
+                                          DialogButton(
+                                            child: Text(
+                                              "OK",
+                                              style: TextStyle(color: Colors.white, fontSize: 20),
+                                            ),
+                                            onPressed: () => Navigator.pop(context),
+                                            width: 120,
+                                          )
+                                        ]
+                                      ).show();
+                                    });
+
                                   }
                                 },
                               ),

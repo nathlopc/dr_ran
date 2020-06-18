@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'util/alerta.dart';
 import 'models/userModel.dart';
 import 'diagnostico.dart';
 import 'components/menuBar.dart';

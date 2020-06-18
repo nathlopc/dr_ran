@@ -107,7 +107,6 @@ class Orientacao extends State<Diagnostico> {
           ),
         ],
       ),
-      bottomSheet: LinkBanner(widget._banner, widget._image, widget._color1, widget._color2, widget._redirect),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
@@ -116,7 +115,7 @@ class Orientacao extends State<Diagnostico> {
               child: Section("Diagnóstico")
             ),
             Padding(
-              padding: EdgeInsets.only(left: 15, right: 15),
+              padding: EdgeInsets.only(left: 15, right: 15, bottom: 15),
               child: Card(
                 child: Column(
                   children: <Widget>[
@@ -181,7 +180,8 @@ class Orientacao extends State<Diagnostico> {
                   ],
                 ),
               ),
-            )
+            ),
+            LinkBanner(widget._banner, widget._image, widget._color1, widget._color2, widget._redirect)
           ]
         )
       )

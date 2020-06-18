@@ -7,6 +7,7 @@ import 'data/ibge.dart';
 import 'components/footer.dart';
 import 'components/section.dart';
 import 'data/firebase.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class Cadastro extends StatefulWidget {
 
@@ -285,7 +286,44 @@ class Formulario extends State<Cadastro> {
                               await FirebaseAPI().insertUser(user).then((sucesso) {
                                 cadastro.currentState.reset();
 
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+                                Alert(
+                                  context: context, 
+                                  title: "Sucesso", 
+                                  desc: "Usuário cadastrado com sucesso!",
+                                  type: AlertType.success,
+                                  buttons: [
+                                    DialogButton(
+                                      child: Text(
+                                        "OK",
+                                        style: TextStyle(color: Colors.white, fontSize: 20),
+                                      ),
+                                      onPressed: () { 
+                                        Navigator.of(context, rootNavigator: true).pop();
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+                                      },
+                                      width: 120,
+                                    )
+                                  ]
+                                ).show();
+                                
+                              })
+                              .catchError((erro){
+                                Alert(
+                                  context: context, 
+                                  title: "Erro", 
+                                  desc: erro.toString(),
+                                  type: AlertType.error,
+                                  buttons: [
+                                    DialogButton(
+                                      child: Text(
+                                        "OK",
+                                        style: TextStyle(color: Colors.white, fontSize: 20),
+                                      ),
+                                      onPressed: () => Navigator.pop(context),
+                                      width: 120,
+                                    )
+                                  ]
+                                ).show();
                               });
                             }
                           }

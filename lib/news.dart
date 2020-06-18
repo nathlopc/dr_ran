@@ -4,7 +4,6 @@ import 'models/newsModel.dart';
 import 'cards/news.dart';
 import 'components/menuBar.dart';
 import 'data/newsapi.dart';
-import 'home.dart';
 import 'models/userModel.dart';
 import 'components/section.dart';
 import 'components/banner.dart';

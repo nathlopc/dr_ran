@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'main.dart';
 import 'news.dart';
 import 'consulta.dart';
@@ -12,7 +13,6 @@ import 'components/section.dart';
 import 'cards/covid.dart';
 import 'models/covidModel.dart';
 import 'data/covidAPI.dart';
-import 'dart:convert';
 import 'data/newsapi.dart';
 import 'components/menuBar.dart';
 import 'guide.dart';
@@ -220,7 +220,7 @@ class Home extends StatelessWidget {
               child: Section("Últimas Notícias")
             ),
             SizedBox(
-              height: 600,
+              height: 700,
               child: FutureBuilder<List<NewsModel>>(
                 future: NewsAPI().getNews(),
                 builder: (context, snapshot) {
@@ -241,7 +241,7 @@ class Home extends StatelessWidget {
                                   padding: EdgeInsets.only(left: 15, right: 30),
                                   child: ClipOval(
                                     child: Material(
-                                      color: Color.fromRGBO(112, 173, 71, 1),
+                                      color: Color.fromRGBO(0, 169, 157, 1),
                                       child: InkWell(
                                         onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => News(_user))),
                                         child: SizedBox(
@@ -339,6 +339,54 @@ class Home extends StatelessWidget {
                 await FirebaseAPI().logout();
 
                 Navigator.push(context, new MaterialPageRoute(builder: (context) => Main()));
+              }
+            ),
+            new ListTile(
+              title: Text(
+                "Excluir conta",
+                style: TextStyle(
+                  color: Colors.red
+                ),
+              ),
+              onTap: () async { 
+                await FirebaseAPI().delete().then((sucesso) {
+                  Alert(
+                    context: context, 
+                    title: "Sucesso",
+                    desc: "Sua conta foi excluída com sucesso!",
+                    type: AlertType.success,
+                    buttons: [
+                      DialogButton(
+                        child: Text(
+                          "OK",
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context, rootNavigator: true).pop();
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => Main()));
+                        },
+                        width: 120,
+                      )
+                    ]
+                  ).show();
+                }).catchError((erro) {
+                  Alert(
+                    context: context, 
+                    title: "Erro", 
+                    desc: erro.toString(),
+                    type: AlertType.error,
+                    buttons: [
+                      DialogButton(
+                        child: Text(
+                          "OK",
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                        onPressed: () => Navigator.pop(context),
+                        width: 120,
+                      )
+                    ]
+                  ).show();
+                });
               }
             )
           ]
